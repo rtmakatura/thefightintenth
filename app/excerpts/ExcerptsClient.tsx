@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import Reveal from '@/components/Reveal';
 import { ORDER_URL, type Excerpt } from '@/lib/content';
 import styles from './excerpts.module.css';
@@ -147,7 +147,24 @@ function ExcerptModal({ excerpt, onClose }: { excerpt: Excerpt; onClose: () => v
         <div className={styles.modalRule} />
         <div className={styles.modalBody}>
           {excerpt.body.map((p, i) => (
-            <p key={i}>{p}</p>
+            <Fragment key={i}>
+              <p>{p}</p>
+              {excerpt.inlineImage &&
+                i === excerpt.inlineImage.afterParagraph && (
+                  <figure className={styles.modalFigure}>
+                    <Image
+                      src={excerpt.inlineImage.src}
+                      alt={excerpt.inlineImage.alt}
+                      width={1400}
+                      height={900}
+                      className={styles.modalFigImg}
+                    />
+                    <figcaption className={styles.modalFigCap}>
+                      {excerpt.inlineImage.caption}
+                    </figcaption>
+                  </figure>
+                )}
+            </Fragment>
           ))}
         </div>
         <div className={styles.modalFoot}>

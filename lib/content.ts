@@ -21,6 +21,12 @@ export type Excerpt = {
   opener: string;
   preview: string;
   body: string[];
+  inlineImage?: {
+    src: string;
+    alt: string;
+    caption: string;
+    afterParagraph: number;
+  };
 };
 
 export type BlogPost = {
@@ -137,20 +143,46 @@ export const EXCERPTS: Excerpt[] = [
     chapter: 'Chapter 1',
     chapterNum: '01',
     title: '"Clear to Engage"',
-    setting: 'Hahn Air Base · November 1989',
-    pages: 'pp. 1–14',
-    readMin: 5,
-    callsign: 'MAK · 10 TFS',
-    tag: 'COLD WAR · ALERT',
-    photo: '/assets/cockpit.jpg',
+    setting: 'Brahma Flight · September 22, 1990',
+    pages: 'pp. 9–11',
+    readMin: 4,
+    callsign: 'BRAHMA · 10 TFS',
+    tag: 'TRAINING · COLD WAR',
+    photo: '/assets/excerpts/ch01-formation.jpg',
+    inlineImage: {
+      src: '/assets/excerpts/ch01-hud.png',
+      alt: 'F-16 HUD frame from a CCIP bombing run',
+      caption:
+        'F-16 HUD / gun-camera frame — CCIP bombing solution at 500 ft AGL.',
+      afterParagraph: 2,
+    },
     opener:
-      'On the cold ramp at Hahn, the canopy seal hissed shut and the world narrowed to a green-glow HUD.',
+      'On September 22, 1990, Brahma Flight, a flight of four F-16s from the 10th Tactical Fighter Squadron (TFS), launched from Hahn Air Base, Germany on a simulated bombing mission aimed at a "target" south of Stuttgart.',
     preview:
-      'On the cold ramp at Hahn, the canopy seal hissed shut and the world narrowed to a green-glow HUD and the rasp of my own breath through the mask. The crew chief stepped clear, snapped a salute, and somewhere over the Channel a controller cleared us in. Twenty-two minutes later we were a four-ship cutting holes in the November sky, bound for a fight nobody hoped would come.',
+      'On September 22, 1990, Brahma Flight, a flight of four F-16s from the 10th Tactical Fighter Squadron (TFS), launched from Hahn Air Base, Germany on a simulated bombing mission aimed at a "target" south of Stuttgart. KC Schow was flight lead for the four-ship, with Ed "Julio" Houle, Dave "McGoo" Sandlin, and JD Williams flying as his wingmen. Julio, the 10th TFS squadron commander, was giving KC his initial flight instructor check ride. I was strapped into the back seat of Julio\'s jet, riding along for the mission.',
     body: [
-      'On the cold ramp at Hahn, the canopy seal hissed shut and the world narrowed to a green-glow HUD and the rasp of my own breath through the mask. The crew chief stepped clear, snapped a salute, and somewhere over the Channel a controller cleared us in. Twenty-two minutes later we were a four-ship cutting holes in the November sky, bound for a fight nobody hoped would come.',
-      "There is a particular silence that lives inside a Viper at high altitude — not the absence of sound, but the way the engine note settles into your bones until you forget it's there. You hear instead the controller's voice, your wingman's clicks, the soft tick of the inertial navigation. And underneath all of it, your own heartbeat, steady, because if it isn't, you have no business being there at all.",
-      'We were the 10th. We had a patch with a sabre on it and a name older than most of our fathers. We had a mission, and we had each other. On that morning in November, that was enough.',
+      'On September 22, 1990, Brahma Flight, a flight of four F-16s from the 10th Tactical Fighter Squadron (TFS), launched from Hahn Air Base, Germany on a simulated bombing mission aimed at a "target" south of Stuttgart. KC Schow was flight lead for the four-ship, with Ed "Julio" Houle, Dave "McGoo" Sandlin, and JD Williams flying as his wingmen. Julio, the 10th TFS squadron commander, was giving KC his initial flight instructor check ride. I was strapped into the back seat of Julio\'s jet, riding along for the mission.',
+      "We held short at the end of Hahn's runway, engines rumbling, waiting for takeoff clearance. Once we got the go-ahead, KC and Julio lit the burners, and we rocketed off the runway into the hazy German sky followed 20 seconds later by McGoo and JD. It didn't take long for things to get interesting.",
+      `"Brahma Flight, Two ship on the nose, 20 miles, high aspect, high speed."
+"Brahma Flight, Offset right, offset right."
+"Brahma Flight, Three-mile trailer, 15,000, high aspect, high speed."
+"Roger. Brahma One and Two offset right."
+"Brahma Three has the target. They are on Brahma One. Brahma Three and Four are heating up."
+"Brahma Two is tally two bandits."
+"Brahma Flight, come back hard left. Brahma Three and Four are tally two. Brahma Three is engaging offensive!"
+"Roger, Brahma Three. Cleared to engage."
+"Brahma One has the southern bandit."
+"Brahma Two has the northern bandit."
+"Brahma Flight, spikes at twelve, offset right."
+"Brahma One and Two are clean."
+"Brahma Three is targeted. Offsetting right."
+"Brahma Two, cleared to engage northern bandit."
+"Brahma Two, Fox Two kill on the northern bandit."
+"Brahma Flight, blow through, reference south."
+"Brahma Three, roger south… Brahma Three blind."
+"Brahma One visual. Brahma Three, your visual is right one o'clock, three miles."
+"Brahma Three, visual."`,
+      'And just like that, Brahma Flight was deep in the heat of simulated combat, mixing it up with notional "bandits" enroute to the target. We were screaming across the German countryside at 500 feet above the ground (AGL) traveling at 420 knots (about 480 miles per hour). Buildings and trees rushed past the cockpit as we approached the attack "initial point" (IP). Once we crossed the simulated "border," the target area came into view. At the IP, KC increased speed to 540 knots (about 620 miles per hour) for the run to the "action point" for the attack.',
     ],
   },
   {
