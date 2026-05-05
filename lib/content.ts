@@ -480,7 +480,7 @@ export const PRESS = {
       headline: 'The Captain Who Brought the Mosel Home',
       deck:
         "Makatura's memoir of the 10th TFS is the rare military book that lingers on the quiet evenings between the missions.",
-      link: '#',
+      link: 'https://pass-the-torch.praesidus.com/an-america-worth-saving/',
     },
     {
       outlet: 'Air & Space Forces Magazine',

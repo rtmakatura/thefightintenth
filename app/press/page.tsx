@@ -26,7 +26,12 @@ export default function PressPage() {
               </div>
               <h2 className={styles.featureTitle}>{feature.headline}</h2>
               <p className={styles.featureDeck}>{feature.deck}</p>
-              <a className={styles.link} href={feature.link}>
+              <a
+                className={styles.link}
+                href={feature.link}
+                target={feature.link.startsWith('http') ? '_blank' : undefined}
+                rel={feature.link.startsWith('http') ? 'noreferrer' : undefined}
+              >
                 Read on {feature.outlet} →
               </a>
             </article>

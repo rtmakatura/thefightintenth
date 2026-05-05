@@ -44,9 +44,9 @@ export default function AboutBookV2() {
           <Reveal className={styles.coverStage}>
             <div className={styles.plinth}>
               <Image
-                src="/assets/cover.png"
-                width={680}
-                height={1020}
+                src="/assets/cover.jpg"
+                width={576}
+                height={871}
                 alt="The Fightin' Tenth book cover"
                 className={styles.coverImg}
                 priority
