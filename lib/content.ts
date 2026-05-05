@@ -214,7 +214,13 @@ export const EXCERPTS: Excerpt[] = [
     readMin: 5,
     callsign: 'R.B.A.A.B. · 10 TFS',
     tag: 'NAMING · TRADITION',
-    photo: '/assets/f16s-hahn.jpg',
+    photo: '/assets/excerpts/ch05-callsigns.jpg',
+    inlineImage: {
+      src: '/assets/excerpts/ch05-pilots.jpg',
+      alt: '10th Tactical Fighter Squadron pilots',
+      caption: '10th TFS · Hahn Air Base.',
+      afterParagraph: 3,
+    },
     opener:
       'One of the most sacred. . .and most humiliating. . .traditions in fighter pilot culture is the naming ceremony.',
     preview:
