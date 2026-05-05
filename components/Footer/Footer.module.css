@@ -1,0 +1,63 @@
+.footer {
+  background: var(--dark-bg);
+  color: var(--tan);
+  padding: 4rem 1.5rem 2.5rem;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.brandLine {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cream);
+  margin-bottom: 0.5rem;
+}
+
+.tag {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--tan);
+  margin-bottom: 2rem;
+}
+
+.socials {
+  display: flex;
+  gap: 1.2rem;
+  justify-content: center;
+  margin-bottom: 2.2rem;
+}
+
+.socials a {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(237, 237, 240, 0.18);
+  color: var(--tan);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.socials a:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.pubText {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--tan);
+  margin: 1.5rem auto 0.5rem;
+  opacity: 0.7;
+}
+
+.copy {
+  font-size: 0.78rem;
+  color: rgba(149, 149, 158, 0.8);
+  letter-spacing: 0.04em;
+  margin-top: 1rem;
+}

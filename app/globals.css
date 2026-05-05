@@ -1,0 +1,194 @@
+/* ============================================
+   THE FIGHTIN' TENTH — Viper Design System
+   Global tokens, base type, primitives.
+   Component-specific styles live in CSS Modules.
+   ============================================ */
+
+:root {
+  /* Viper palette */
+  --cream: #EDEDF0;
+  --tan: #95959E;
+  --dark-bg: #141418;
+  --rich-mid: #28282E;
+  --accent: #4894D0;
+  --accent-dark: #3070A8;
+  --text-pri: #141416;
+  --text-sec: #52525C;
+  --text-light: #EDEDF0;
+
+  /* derived */
+  --hairline: rgba(20, 20, 24, 0.08);
+  --hairline-dark: rgba(237, 237, 240, 0.08);
+  --shadow-cool:
+    0 18px 50px -20px rgba(20, 20, 30, 0.35),
+    0 4px 18px -8px rgba(20, 20, 30, 0.18);
+  --shadow-deep:
+    0 30px 80px -30px rgba(0, 0, 0, 0.6),
+    0 12px 30px -10px rgba(0, 0, 0, 0.35);
+
+  --max-w: 1100px;
+  --narrow-w: 780px;
+  --section-y: clamp(4rem, 8vw, 6.5rem);
+}
+
+/* font-family vars are provided by next/font on <html> — see app/layout.tsx */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--cream);
+  color: var(--text-pri);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img { max-width: 100%; display: block; }
+a { color: var(--accent); text-decoration: none; transition: color 0.2s ease; }
+a:hover { color: var(--accent-dark); }
+
+button { font-family: inherit; }
+
+/* ----- Type scale ----- */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0 0 1rem;
+  line-height: 1.1;
+}
+h2 { font-size: clamp(2rem, 3.5vw, 2.5rem); }
+h3 { font-size: 1.4rem; }
+p { margin: 0 0 1.1rem; }
+
+.font-display { font-family: var(--font-display); }
+.font-italic { font-family: var(--font-display); font-style: italic; }
+.font-mono { font-family: var(--font-mono); }
+
+/* ----- Layout helpers ----- */
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem; }
+.container-narrow { max-width: var(--narrow-w); margin: 0 auto; padding: 0 1.5rem; }
+
+.section { padding: var(--section-y) 0; position: relative; }
+.section-light { background: var(--cream); color: var(--text-pri); }
+.section-dark { background: var(--dark-bg); color: var(--text-light); }
+.section-dark h1, .section-dark h2, .section-dark h3 { color: var(--text-light); }
+
+.text-center { text-align: center; }
+.text-sec { color: var(--text-sec); }
+.text-tan { color: var(--tan); }
+
+.lede {
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: var(--text-sec);
+}
+.lede-light {
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: rgba(237, 237, 240, 0.8);
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  margin-bottom: 0.8rem;
+}
+.kicker .bar { width: 28px; height: 1px; background: var(--accent); }
+.kicker-light .bar { background: var(--accent); }
+
+.rule {
+  width: 60px;
+  height: 1px;
+  background: var(--accent);
+  margin: 1.5rem auto;
+}
+.rule-left { margin-left: 0; }
+
+/* ----- Buttons ----- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.95rem 2rem;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  border: 1px solid;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  border-radius: 0;
+}
+.btn-outline-light {
+  border-color: rgba(237, 237, 240, 0.4);
+  color: var(--text-light);
+}
+.btn-outline-light:hover {
+  border-color: rgba(237, 237, 240, 0.85);
+  background: rgba(237, 237, 240, 0.08);
+  color: var(--text-light);
+  transform: translateY(-2px);
+}
+.btn-dark {
+  background: var(--rich-mid);
+  border-color: var(--accent);
+  color: var(--text-light);
+}
+.btn-dark:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-light);
+  transform: translateY(-2px);
+}
+.btn-ghost {
+  border-color: var(--rich-mid);
+  color: var(--text-pri);
+}
+.btn-ghost:hover {
+  background: var(--rich-mid);
+  color: var(--text-light);
+}
+
+/* ----- Reveal animations (used by <Reveal />) ----- */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal.delay-1 { transition-delay: 0.08s; }
+.reveal.delay-2 { transition-delay: 0.16s; }
+.reveal.delay-3 { transition-delay: 0.24s; }
+.reveal.delay-4 { transition-delay: 0.32s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
