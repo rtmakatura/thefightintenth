@@ -101,6 +101,16 @@
 }
 .body p { margin: 0 0 1.3rem; }
 
+.introSig {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--text-pri);
+  text-align: right;
+  margin-top: 1.6rem;
+}
+
 /* ---------- Index ---------- */
 .indexWrap {
   margin: 0 auto 4rem;

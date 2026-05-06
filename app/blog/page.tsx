@@ -54,6 +54,7 @@ export default function BlogPage() {
               {BLOG_INTRO.body.map((p, i) => (
                 <p key={i}>{p}</p>
               ))}
+              <div className={styles.introSig}>— Mak</div>
             </div>
           </Reveal>
 
