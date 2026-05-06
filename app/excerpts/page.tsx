@@ -8,6 +8,10 @@ export const metadata = {
 };
 
 export default function ExcerptsPage() {
+  const ordered = [...EXCERPTS].sort(
+    (a, b) => Number(a.chapterNum) - Number(b.chapterNum),
+  );
+
   return (
     <main>
       <PageHead eyebrow="From the Pages" title="Excerpts" />
@@ -21,7 +25,7 @@ export default function ExcerptsPage() {
               callsigns, and the ninety-six-hour grind of a NATO TAC EVAL.
             </p>
           </Reveal>
-          <ExcerptsClient excerpts={EXCERPTS} />
+          <ExcerptsClient excerpts={ordered} />
         </div>
       </section>
     </main>
