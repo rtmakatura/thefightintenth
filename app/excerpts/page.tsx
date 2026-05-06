@@ -16,9 +16,9 @@ export default function ExcerptsPage() {
         <div className="container">
           <Reveal className="text-center">
             <p className="lede" style={{ marginBottom: '3rem' }}>
-              Three passages from the book — the first taxi at Hahn, a TAC EVAL on a
-              rubber-suit night, and the Friday on which a young lieutenant earned his
-              callsign.
+              Three passages from the book — a 1990 four-ship cleared to engage
+              over Germany, the squadron tradition that turns mistakes into
+              callsigns, and the ninety-six-hour grind of a NATO TAC EVAL.
             </p>
           </Reveal>
           <ExcerptsClient excerpts={EXCERPTS} />
