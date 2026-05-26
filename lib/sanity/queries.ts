@@ -63,7 +63,14 @@ export const excerptsQuery = `*[_type == "excerpt"] | order(chapterNumber asc){
   opener,
   preview,
   body,
-  inlineImage
+  "inlineImage": select(
+    defined(inlineImage.image) => {
+      "image": inlineImage.image,
+      "alt": inlineImage.alt,
+      "caption": inlineImage.caption,
+      "afterParagraph": inlineImage.afterParagraph
+    }
+  )
 }`;
 
 export const blogPostsQuery = `*[_type == "blogPost"] | order(date desc){
@@ -93,8 +100,17 @@ export const pressItemsQuery = `*[_type == "pressItem"] | order(order asc, date 
   url
 }`;
 
-export const photosQuery = `*[_type == "photo"] | order(order asc){
+export const photoChaptersQuery = `*[_type == "photoChapter"] | order(order asc){
   _id,
-  image,
-  caption
+  order,
+  kicker,
+  title,
+  dates,
+  blurb,
+  plates[]{
+    image,
+    span,
+    label,
+    caption
+  }
 }`;

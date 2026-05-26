@@ -62,12 +62,12 @@ export type Excerpt = {
   readMin?: number;
   callsign?: string;
   tag?: string;
-  photo?: string;
+  photo?: SanityImage;
   opener?: string;
   preview?: string;
   body?: string[];
   inlineImage?: {
-    src?: string;
+    image?: SanityImage;
     alt?: string;
     caption?: string;
     afterParagraph?: number;
@@ -101,8 +101,19 @@ export type PressItem = {
   url: string;
 };
 
-export type Photo = {
-  _id: string;
+export type PhotoPlate = {
   image: SanityImage;
+  span?: 'wide' | 'tall' | 'wide-tall' | 'square';
+  label?: string;
   caption?: string;
+};
+
+export type PhotoChapter = {
+  _id: string;
+  order?: number;
+  kicker?: string;
+  title: string;
+  dates?: string;
+  blurb?: string;
+  plates?: PhotoPlate[];
 };

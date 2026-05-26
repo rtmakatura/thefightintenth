@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Reveal from '@/components/Reveal';
-import type { PhotoChapter, PhotoPlate } from '@/lib/content';
+import { urlFor } from '@/lib/sanity/image';
+import type { PhotoChapter, PhotoPlate } from '@/lib/sanity/types';
 import styles from './photos.module.css';
 
 type Props = { chapters: PhotoChapter[] };
@@ -15,13 +16,31 @@ type Flat = {
   globalIdx: number;
 };
 
+function thumbUrl(image: PhotoPlate['image']): string | null {
+  if (!image) return null;
+  try {
+    return urlFor(image).width(1400).height(900).fit('crop').auto('format').url();
+  } catch {
+    return null;
+  }
+}
+
+function fullUrl(image: PhotoPlate['image']): string | null {
+  if (!image) return null;
+  try {
+    return urlFor(image).width(2400).auto('format').url();
+  } catch {
+    return null;
+  }
+}
+
 export default function PhotosClient({ chapters }: Props) {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
 
   const flat: Flat[] = useMemo(() => {
     const out: Flat[] = [];
     chapters.forEach((c, ci) =>
-      c.plates.forEach((p, pi) =>
+      (c.plates ?? []).forEach((p, pi) =>
         out.push({ plate: p, chapter: c, ci, pi, globalIdx: out.length }),
       ),
     );
@@ -30,7 +49,7 @@ export default function PhotosClient({ chapters }: Props) {
 
   const plateNumberFor = (ci: number, pi: number) => {
     let n = 0;
-    for (let i = 0; i < ci; i++) n += chapters[i].plates.length;
+    for (let i = 0; i < ci; i++) n += chapters[i].plates?.length ?? 0;
     return n + pi + 1;
   };
 
@@ -63,7 +82,7 @@ export default function PhotosClient({ chapters }: Props) {
     <>
       {chapters.map((ch, ci) => (
         <section
-          key={ch.id}
+          key={ch._id}
           className={`section ${ci % 2 === 0 ? 'section-light' : styles.sectionCream} ${styles.chapter}`}
         >
           <div className="container">
@@ -71,22 +90,26 @@ export default function PhotosClient({ chapters }: Props) {
               <header className={styles.chapterHead}>
                 <div className={styles.chapterRule} />
                 <div className={styles.chapterMeta}>
-                  <span className="kicker">
-                    <span className="bar" />
-                    {ch.kicker}
-                  </span>
-                  <span className={styles.chapterDates}>{ch.dates}</span>
+                  {ch.kicker && (
+                    <span className="kicker">
+                      <span className="bar" />
+                      {ch.kicker}
+                    </span>
+                  )}
+                  {ch.dates && <span className={styles.chapterDates}>{ch.dates}</span>}
                 </div>
                 <h2 className={styles.chapterTitle}>{ch.title}</h2>
-                <p className={styles.chapterBlurb}>{ch.blurb}</p>
+                {ch.blurb && <p className={styles.chapterBlurb}>{ch.blurb}</p>}
               </header>
             </Reveal>
 
             <div className={styles.mosaic}>
-              {ch.plates.map((p, pi) => {
+              {(ch.plates ?? []).map((p, pi) => {
                 const num = plateNumberFor(ci, pi);
                 const span = p.span || 'square';
                 const fl = flat.find((f) => f.ci === ci && f.pi === pi);
+                const src = thumbUrl(p.image);
+                if (!src) return null;
                 return (
                   <Reveal
                     key={pi}
@@ -104,14 +127,11 @@ export default function PhotosClient({ chapters }: Props) {
                           setOpenIdx(fl.globalIdx);
                         }
                       }}
-                      aria-label={`Enlarge plate ${num}: ${p.label}`}
+                      aria-label={`Enlarge plate ${num}: ${p.label ?? ''}`}
                     >
                       <div className={styles.frame}>
-                        {/* Use plain <img> — many filenames in data.ts point to assets
-                            that haven't been sourced yet; next/image would error on a
-                            missing remote, while <img> gracefully degrades. */}
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={p.src} alt={p.caption} loading="lazy" />
+                        <img src={src} alt={p.caption ?? p.label ?? ''} loading="lazy" />
                         <div className={styles.plateHover} aria-hidden="true">
                           <span className={styles.plateZoom}>↗ Enlarge</span>
                         </div>
@@ -121,9 +141,9 @@ export default function PhotosClient({ chapters }: Props) {
                           <span className={styles.plateNum}>
                             Plate {String(num).padStart(2, '0')}
                           </span>
-                          <span className={styles.plateLabel}>{p.label}</span>
+                          {p.label && <span className={styles.plateLabel}>{p.label}</span>}
                         </div>
-                        <p className={styles.plateText}>{p.caption}</p>
+                        {p.caption && <p className={styles.plateText}>{p.caption}</p>}
                       </figcaption>
                     </figure>
                   </Reveal>
@@ -169,7 +189,10 @@ export default function PhotosClient({ chapters }: Props) {
           <figure className={styles.lbStage} onClick={(e) => e.stopPropagation()}>
             <div className={styles.lbImage}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={open.plate.src} alt={open.plate.caption} />
+              <img
+                src={fullUrl(open.plate.image) ?? ''}
+                alt={open.plate.caption ?? open.plate.label ?? ''}
+              />
             </div>
             <figcaption className={styles.lbCap}>
               <div className={styles.lbCapRow}>
@@ -178,11 +201,12 @@ export default function PhotosClient({ chapters }: Props) {
                   {String(flat.length).padStart(2, '0')}
                 </span>
                 <span className={styles.lbChapter}>
-                  {open.chapter.title} · {open.chapter.dates}
+                  {open.chapter.title}
+                  {open.chapter.dates && ` · ${open.chapter.dates}`}
                 </span>
               </div>
-              <h4 className={styles.lbLabel}>{open.plate.label}</h4>
-              <p className={styles.lbText}>{open.plate.caption}</p>
+              {open.plate.label && <h4 className={styles.lbLabel}>{open.plate.label}</h4>}
+              {open.plate.caption && <p className={styles.lbText}>{open.plate.caption}</p>}
             </figcaption>
           </figure>
         </div>

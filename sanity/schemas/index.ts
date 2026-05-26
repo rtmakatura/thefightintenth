@@ -7,7 +7,7 @@ import { book } from './documents/book';
 import { endorsement } from './documents/endorsement';
 import { excerpt } from './documents/excerpt';
 import { homePage } from './documents/homePage';
-import { photo } from './documents/photo';
+import { photoChapter } from './documents/photoChapter';
 import { pressItem } from './documents/pressItem';
 import { siteSettings } from './documents/siteSettings';
 
@@ -29,5 +29,5 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   excerpt,
   blogPost,
   pressItem,
-  photo,
+  photoChapter,
 ];

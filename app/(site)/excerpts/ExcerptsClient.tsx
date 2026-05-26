@@ -3,11 +3,30 @@
 import Image from 'next/image';
 import { Fragment, useEffect, useState } from 'react';
 import Reveal from '@/components/Reveal';
+import { urlFor } from '@/lib/sanity/image';
 import { toParagraphText } from '@/lib/sanity/portable';
 import type { Excerpt } from '@/lib/sanity/types';
 import styles from './excerpts.module.css';
 
 type Props = { excerpts: Excerpt[]; preorderUrl: string };
+
+function photoUrl(image: Excerpt['photo']): string | null {
+  if (!image) return null;
+  try {
+    return urlFor(image).width(1400).height(900).fit('crop').auto('format').url();
+  } catch {
+    return null;
+  }
+}
+
+function inlineUrl(image: NonNullable<Excerpt['inlineImage']>['image']): string | null {
+  if (!image) return null;
+  try {
+    return urlFor(image).width(1400).auto('format').url();
+  } catch {
+    return null;
+  }
+}
 
 export default function ExcerptsClient({ excerpts, preorderUrl }: Props) {
   const [active, setActive] = useState<Excerpt | null>(null);
@@ -46,6 +65,7 @@ function Spread({
   const preview = excerpt.preview ?? '';
   const restOfPreview = opener ? preview.slice(opener.length).trim() : preview;
   const numeral = String(excerpt.chapterNum).padStart(2, '0');
+  const photo = photoUrl(excerpt.photo);
 
   return (
     <Reveal>
@@ -62,15 +82,15 @@ function Spread({
         }}
         aria-label={`Read excerpt: ${excerpt.title}`}
       >
-        {excerpt.photo && (
+        {photo && (
           <div className={styles.photo}>
             <Image
-              src={excerpt.photo}
+              src={photo}
               alt=""
               width={1400}
               height={900}
               className={styles.photoImg}
-              unoptimized={excerpt.photo.startsWith('http')}
+              unoptimized
             />
             <div className={styles.photoOverlay} aria-hidden="true" />
             <div className={styles.photoCap}>
@@ -152,6 +172,7 @@ function ExcerptModal({
 
   const body = (excerpt.body ?? []).map(toParagraphText);
   const inline = excerpt.inlineImage;
+  const inlineSrc = inline ? inlineUrl(inline.image) : null;
 
   return (
     <div
@@ -182,15 +203,15 @@ function ExcerptModal({
           {body.map((p, i) => (
             <Fragment key={i}>
               <p>{p}</p>
-              {inline?.src && inline.afterParagraph === i && (
+              {inlineSrc && inline?.afterParagraph === i && (
                 <figure className={styles.modalFigure}>
                   <Image
-                    src={inline.src}
+                    src={inlineSrc}
                     alt={inline.alt ?? ''}
                     width={1400}
                     height={900}
                     className={styles.modalFigImg}
-                    unoptimized={inline.src.startsWith('http')}
+                    unoptimized
                   />
                   {inline.caption && (
                     <figcaption className={styles.modalFigCap}>

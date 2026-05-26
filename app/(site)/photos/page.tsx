@@ -1,6 +1,8 @@
 import PageHead from '@/components/PageHead/PageHead';
 import Reveal from '@/components/Reveal';
-import { PHOTO_CHAPTERS } from '@/lib/content';
+import { sanityFetch } from '@/lib/sanity/fetch';
+import { photoChaptersQuery } from '@/lib/sanity/queries';
+import type { PhotoChapter } from '@/lib/sanity/types';
 import PhotosClient from './PhotosClient';
 import styles from './photos.module.css';
 
@@ -8,8 +10,14 @@ export const metadata = {
   title: "Photos — The Fightin' Tenth",
 };
 
-export default function PhotosPage() {
-  const totalPlates = PHOTO_CHAPTERS.reduce((acc, c) => acc + c.plates.length, 0);
+export const revalidate = 60;
+
+export default async function PhotosPage() {
+  const chapters = (await sanityFetch<PhotoChapter[]>(photoChaptersQuery)) ?? [];
+  const totalPlates = chapters.reduce(
+    (acc, c) => acc + (c.plates?.length ?? 0),
+    0,
+  );
 
   return (
     <main className={styles.page}>
@@ -32,7 +40,7 @@ export default function PhotosPage() {
               </div>
               <div>
                 <span className={styles.k}>Chapters</span>
-                <span className={styles.v}>{PHOTO_CHAPTERS.length}</span>
+                <span className={styles.v}>{chapters.length}</span>
               </div>
               <div>
                 <span className={styles.k}>Years</span>
@@ -47,7 +55,7 @@ export default function PhotosPage() {
         </div>
       </section>
 
-      <PhotosClient chapters={PHOTO_CHAPTERS} />
+      <PhotosClient chapters={chapters} />
 
       <section className="section section-light">
         <div className="container-narrow text-center">

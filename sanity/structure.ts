@@ -30,5 +30,5 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem('excerpt').title('Excerpts'),
       S.documentTypeListItem('blogPost').title('Blog Posts'),
       S.documentTypeListItem('pressItem').title('Press'),
-      S.documentTypeListItem('photo').title('Photos'),
+      S.documentTypeListItem('photoChapter').title('Photo Chapters'),
     ]);

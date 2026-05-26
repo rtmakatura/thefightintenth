@@ -77,10 +77,10 @@ export const excerpt = defineType({
     }),
     defineField({
       name: 'photo',
-      title: 'Card Photo (URL or Path)',
-      type: 'string',
-      description:
-        'Path under /public (e.g. /assets/excerpts/ch01-formation.jpg) or full URL.',
+      title: 'Card Photo',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Large photo shown on the excerpt card.',
     }),
     defineField({
       name: 'inlineImage',
@@ -89,9 +89,10 @@ export const excerpt = defineType({
       description: 'Optional image inserted into the modal body after a paragraph.',
       fields: [
         defineField({
-          name: 'src',
-          title: 'Source (URL or Path)',
-          type: 'string',
+          name: 'image',
+          title: 'Image',
+          type: 'image',
+          options: { hotspot: true },
         }),
         defineField({
           name: 'alt',
@@ -121,10 +122,11 @@ export const excerpt = defineType({
     },
   ],
   preview: {
-    select: { chapter: 'chapterLabel', title: 'title' },
-    prepare: ({ chapter, title }) => ({
+    select: { chapter: 'chapterLabel', title: 'title', media: 'photo' },
+    prepare: ({ chapter, title, media }) => ({
       title: title ?? 'Untitled',
       subtitle: chapter,
+      media,
     }),
   },
 });
