@@ -3,7 +3,8 @@
 import Image from 'next/image';
 import { Fragment, useEffect, useState } from 'react';
 import Reveal from '@/components/Reveal';
-import { type Excerpt } from '@/lib/content';
+import { toParagraphText } from '@/lib/sanity/portable';
+import type { Excerpt } from '@/lib/sanity/types';
 import styles from './excerpts.module.css';
 
 type Props = { excerpts: Excerpt[]; preorderUrl: string };
@@ -15,7 +16,7 @@ export default function ExcerptsClient({ excerpts, preorderUrl }: Props) {
     <>
       <div className={styles.stack}>
         {excerpts.map((e, i) => (
-          <Spread key={e.title} excerpt={e} idx={i} onOpen={() => setActive(e)} />
+          <Spread key={e._id} excerpt={e} idx={i} onOpen={() => setActive(e)} />
         ))}
       </div>
       {active && (
@@ -39,10 +40,12 @@ function Spread({
   onOpen: () => void;
 }) {
   const flip = idx % 2 === 1;
-  const opener = excerpt.opener;
+  const opener = excerpt.opener ?? '';
   const drop = opener.charAt(0);
   const openerRest = opener.slice(1);
-  const restOfPreview = excerpt.preview.slice(opener.length).trim();
+  const preview = excerpt.preview ?? '';
+  const restOfPreview = opener ? preview.slice(opener.length).trim() : preview;
+  const numeral = String(excerpt.chapterNum).padStart(2, '0');
 
   return (
     <Reveal>
@@ -59,37 +62,50 @@ function Spread({
         }}
         aria-label={`Read excerpt: ${excerpt.title}`}
       >
-        <div className={styles.photo}>
-          <Image
-            src={excerpt.photo}
-            alt=""
-            width={1400}
-            height={900}
-            className={styles.photoImg}
-          />
-          <div className={styles.photoOverlay} aria-hidden="true" />
-          <div className={styles.photoCap}>
-            <span className={styles.capK}>Plate {String(idx + 1).padStart(2, '0')}</span>
-            <span className={styles.capV}>{excerpt.setting}</span>
+        {excerpt.photo && (
+          <div className={styles.photo}>
+            <Image
+              src={excerpt.photo}
+              alt=""
+              width={1400}
+              height={900}
+              className={styles.photoImg}
+              unoptimized={excerpt.photo.startsWith('http')}
+            />
+            <div className={styles.photoOverlay} aria-hidden="true" />
+            <div className={styles.photoCap}>
+              <span className={styles.capK}>Plate {String(idx + 1).padStart(2, '0')}</span>
+              {excerpt.setting && <span className={styles.capV}>{excerpt.setting}</span>}
+            </div>
           </div>
-        </div>
+        )}
         <div className={styles.text}>
           <div className={styles.numeral} aria-hidden="true">
-            {excerpt.chapterNum}
+            {numeral}
           </div>
           <div className={styles.meta}>
             <span>{excerpt.chapter}</span>
-            <span className={styles.dot} />
-            <span>{excerpt.pages}</span>
-            <span className={styles.dot} />
-            <span>{excerpt.readMin} min</span>
+            {excerpt.pages && (
+              <>
+                <span className={styles.dot} />
+                <span>{excerpt.pages}</span>
+              </>
+            )}
+            {excerpt.readMin != null && (
+              <>
+                <span className={styles.dot} />
+                <span>{excerpt.readMin} min</span>
+              </>
+            )}
           </div>
           <h3 className={styles.title}>{excerpt.title}</h3>
-          <p className={styles.opener}>
-            <span className={styles.dropcap}>{drop}</span>
-            {openerRest}
-          </p>
-          <p className={styles.rest}>{restOfPreview}</p>
+          {opener && (
+            <p className={styles.opener}>
+              <span className={styles.dropcap}>{drop}</span>
+              {openerRest}
+            </p>
+          )}
+          {restOfPreview && <p className={styles.rest}>{restOfPreview}</p>}
           <div className={styles.foot}>
             <button
               type="button"
@@ -104,7 +120,7 @@ function Spread({
                 <path d="M1 5h11M8.5 1L13 5l-4.5 4" stroke="currentColor" strokeWidth="1.4" />
               </svg>
             </button>
-            <span className={styles.tag}>{excerpt.tag}</span>
+            {excerpt.tag && <span className={styles.tag}>{excerpt.tag}</span>}
           </div>
         </div>
       </article>
@@ -134,6 +150,9 @@ function ExcerptModal({
     };
   }, [onClose]);
 
+  const body = (excerpt.body ?? []).map(toParagraphText);
+  const inline = excerpt.inlineImage;
+
   return (
     <div
       className={styles.modalBg}
@@ -160,24 +179,26 @@ function ExcerptModal({
         <h2 className={styles.modalTitle}>{excerpt.title}</h2>
         <div className={styles.modalRule} />
         <div className={styles.modalBody}>
-          {excerpt.body.map((p, i) => (
+          {body.map((p, i) => (
             <Fragment key={i}>
               <p>{p}</p>
-              {excerpt.inlineImage &&
-                i === excerpt.inlineImage.afterParagraph && (
-                  <figure className={styles.modalFigure}>
-                    <Image
-                      src={excerpt.inlineImage.src}
-                      alt={excerpt.inlineImage.alt}
-                      width={1400}
-                      height={900}
-                      className={styles.modalFigImg}
-                    />
+              {inline?.src && inline.afterParagraph === i && (
+                <figure className={styles.modalFigure}>
+                  <Image
+                    src={inline.src}
+                    alt={inline.alt ?? ''}
+                    width={1400}
+                    height={900}
+                    className={styles.modalFigImg}
+                    unoptimized={inline.src.startsWith('http')}
+                  />
+                  {inline.caption && (
                     <figcaption className={styles.modalFigCap}>
-                      {excerpt.inlineImage.caption}
+                      {inline.caption}
                     </figcaption>
-                  </figure>
-                )}
+                  )}
+                </figure>
+              )}
             </Fragment>
           ))}
         </div>

@@ -3,8 +3,8 @@ import Reveal from '@/components/Reveal';
 import ExcerptsClient from './ExcerptsClient';
 import { EXCERPTS, ORDER_URL } from '@/lib/content';
 import { sanityFetch } from '@/lib/sanity/fetch';
-import { siteSettingsQuery } from '@/lib/sanity/queries';
-import type { SiteSettings } from '@/lib/sanity/types';
+import { excerptsQuery, siteSettingsQuery } from '@/lib/sanity/queries';
+import type { Excerpt, SiteSettings } from '@/lib/sanity/types';
 
 export const metadata = {
   title: "Excerpts — The Fightin' Tenth",
@@ -13,10 +13,33 @@ export const metadata = {
 export const revalidate = 60;
 
 export default async function ExcerptsPage() {
-  const settings = await sanityFetch<SiteSettings | null>(siteSettingsQuery);
-  const preorderUrl = settings?.preorderUrl ?? ORDER_URL;
+  const [settings, fetched] = await Promise.all([
+    sanityFetch<SiteSettings | null>(siteSettingsQuery),
+    sanityFetch<Excerpt[]>(excerptsQuery),
+  ]);
 
-  const ordered = [...EXCERPTS].sort(
+  const preorderUrl = settings?.preorderUrl ?? ORDER_URL;
+  const source: Excerpt[] =
+    fetched && fetched.length > 0
+      ? fetched
+      : (EXCERPTS.map((e, i) => ({
+          _id: `fallback-${i}`,
+          chapter: e.chapter,
+          chapterNum: Number(e.chapterNum),
+          title: e.title,
+          setting: e.setting,
+          pages: e.pages,
+          readMin: e.readMin,
+          callsign: e.callsign,
+          tag: e.tag,
+          photo: e.photo,
+          opener: e.opener,
+          preview: e.preview,
+          body: e.body,
+          inlineImage: e.inlineImage,
+        })) as Excerpt[]);
+
+  const ordered = [...source].sort(
     (a, b) => Number(a.chapterNum) - Number(b.chapterNum),
   );
 

@@ -21,6 +21,10 @@ export const structure: StructureResolver = (S) =>
         .title('About Page')
         .id('aboutPage')
         .child(S.document().schemaType('aboutPage').documentId('aboutPage')),
+      S.listItem()
+        .title('Blog Intro')
+        .id('blogIntro')
+        .child(S.document().schemaType('blogIntro').documentId('blogIntro')),
       S.divider(),
       S.documentTypeListItem('endorsement').title('Endorsements'),
       S.documentTypeListItem('excerpt').title('Excerpts'),

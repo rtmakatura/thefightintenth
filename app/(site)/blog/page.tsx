@@ -1,11 +1,17 @@
 import PageHead from '@/components/PageHead/PageHead';
 import Reveal from '@/components/Reveal';
 import { BLOG, BLOG_INTRO } from '@/lib/content';
+import { sanityFetch } from '@/lib/sanity/fetch';
+import { toParagraphText } from '@/lib/sanity/portable';
+import { blogIntroQuery, blogPostsQuery } from '@/lib/sanity/queries';
+import type { BlogIntro, BlogPost } from '@/lib/sanity/types';
 import styles from './blog.module.css';
 
 export const metadata = {
   title: "From the Author — The Fightin' Tenth",
 };
+
+export const revalidate = 60;
 
 const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
@@ -13,9 +19,9 @@ function parseDate(s: string): { month: string; day: string; year: string } {
   const d = new Date(s);
   if (isNaN(d.getTime())) return { month: '', day: '', year: '' };
   return {
-    month: MONTHS[d.getMonth()],
-    day: String(d.getDate()).padStart(2, '0'),
-    year: String(d.getFullYear()),
+    month: MONTHS[d.getUTCMonth()],
+    day: String(d.getUTCDate()).padStart(2, '0'),
+    year: String(d.getUTCFullYear()),
   };
 }
 
@@ -26,7 +32,29 @@ function slugify(s: string): string {
     .replace(/^-|-$/g, '');
 }
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const [fetchedIntro, fetchedPosts] = await Promise.all([
+    sanityFetch<BlogIntro | null>(blogIntroQuery),
+    sanityFetch<BlogPost[]>(blogPostsQuery),
+  ]);
+
+  const intro: BlogIntro = fetchedIntro ?? BLOG_INTRO;
+  const posts: BlogPost[] =
+    fetchedPosts && fetchedPosts.length > 0
+      ? fetchedPosts
+      : (BLOG.map((p, i) => ({
+          _id: `fallback-${i}`,
+          title: p.title,
+          date: p.date,
+          kicker: p.kicker,
+          lede: p.lede,
+          excerpt: p.excerpt,
+          body: p.body,
+          signOff: 'Mak',
+        })) as BlogPost[]);
+
+  const introBody = (intro.body ?? []).map(toParagraphText);
+
   return (
     <main>
       <PageHead eyebrow="Notes & Dispatches" title="From the Author" />
@@ -42,16 +70,16 @@ export default function BlogPage() {
           </Reveal>
 
           <Reveal className={styles.intro}>
-            <div className={styles.kicker}>{BLOG_INTRO.kicker}</div>
-            <p className={styles.question}>{BLOG_INTRO.question}</p>
-            <h2 className={styles.lede}>{BLOG_INTRO.lede}</h2>
+            {intro.kicker && <div className={styles.kicker}>{intro.kicker}</div>}
+            {intro.question && <p className={styles.question}>{intro.question}</p>}
+            {intro.lede && <h2 className={styles.lede}>{intro.lede}</h2>}
             <div className={styles.dotRule} aria-hidden="true">
               <span className={styles.line} />
               <span className={styles.dot} />
               <span className={styles.line} />
             </div>
             <div className={styles.body}>
-              {BLOG_INTRO.body.map((p, i) => (
+              {introBody.map((p, i) => (
                 <p key={i}>{p}</p>
               ))}
               <div className={styles.introSig}>— Mak</div>
@@ -60,10 +88,10 @@ export default function BlogPage() {
 
           <Reveal className={styles.indexWrap}>
             <nav className={styles.index} aria-label="Posts in this dispatch">
-              {BLOG.map((post, i) => {
+              {posts.map((post, i) => {
                 const { month, day } = parseDate(post.date);
                 return (
-                  <a key={post.title} href={`#post-${slugify(post.title)}`}>
+                  <a key={post._id} href={`#post-${slugify(post.title)}`}>
                     <div className={styles.ixNum}>№ {String(i + 1).padStart(2, '0')}</div>
                     <div className={styles.ixTitle}>{post.title}</div>
                     <div className={styles.ixDate}>
@@ -75,14 +103,16 @@ export default function BlogPage() {
             </nav>
           </Reveal>
 
-          {BLOG.map((post, i) => {
+          {posts.map((post, i) => {
             const { month, day, year } = parseDate(post.date);
-            const total = BLOG.length;
-            const showRule = post.body.length > 4;
-            const ruleAfterIdx = Math.floor(post.body.length / 2) - 1;
+            const total = posts.length;
+            const body = (post.body ?? []).map(toParagraphText);
+            const showRule = body.length > 4;
+            const ruleAfterIdx = Math.floor(body.length / 2) - 1;
+            const signOff = post.signOff ?? 'Mak';
 
             return (
-              <Reveal key={post.title}>
+              <Reveal key={post._id}>
                 <article className={styles.post} id={`post-${slugify(post.title)}`}>
                   <header className={styles.postHead}>
                     <div className={styles.datestamp}>
@@ -101,7 +131,7 @@ export default function BlogPage() {
                   </header>
 
                   <div className={styles.bodyContent}>
-                    {post.body.map((para, j) => (
+                    {body.map((para, j) => (
                       <div key={j}>
                         <p>{para}</p>
                         {showRule && j === ruleAfterIdx && (
@@ -116,7 +146,7 @@ export default function BlogPage() {
                   </div>
 
                   <footer className={styles.foot}>
-                    <span className={styles.signature}>— Mak</span>
+                    <span className={styles.signature}>— {signOff}</span>
                     <span className={styles.tag}>{post.kicker || 'Dispatch'}</span>
                   </footer>
                 </article>

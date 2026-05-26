@@ -54,21 +54,42 @@ export type AboutPage = {
 
 export type Excerpt = {
   _id: string;
-  chapterNumber: number;
-  chapterLabel: string;
+  chapter: string;
+  chapterNum: number;
   title: string;
-  body?: PortableTextBlock[];
-  heroImage?: SanityImage;
+  setting?: string;
+  pages?: string;
+  readMin?: number;
+  callsign?: string;
+  tag?: string;
+  photo?: string;
+  opener?: string;
+  preview?: string;
+  body?: string[];
+  inlineImage?: {
+    src?: string;
+    alt?: string;
+    caption?: string;
+    afterParagraph?: number;
+  };
 };
 
 export type BlogPost = {
   _id: string;
   title: string;
   date: string;
-  summary?: string;
-  body?: PortableTextBlock[];
-  featuredImage?: SanityImage;
+  kicker?: string;
+  lede?: string;
+  excerpt?: string;
+  body?: string[];
   signOff?: string;
+};
+
+export type BlogIntro = {
+  kicker?: string;
+  question?: string;
+  lede?: string;
+  body?: string[];
 };
 
 export type PressItem = {

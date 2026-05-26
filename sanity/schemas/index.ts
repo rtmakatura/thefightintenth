@@ -1,6 +1,7 @@
 import type { SchemaTypeDefinition } from 'sanity';
 
 import { aboutPage } from './documents/aboutPage';
+import { blogIntro } from './documents/blogIntro';
 import { blogPost } from './documents/blogPost';
 import { book } from './documents/book';
 import { endorsement } from './documents/endorsement';
@@ -10,13 +11,20 @@ import { photo } from './documents/photo';
 import { pressItem } from './documents/pressItem';
 import { siteSettings } from './documents/siteSettings';
 
-export const SINGLETON_TYPES = ['siteSettings', 'book', 'homePage', 'aboutPage'] as const;
+export const SINGLETON_TYPES = [
+  'siteSettings',
+  'book',
+  'homePage',
+  'aboutPage',
+  'blogIntro',
+] as const;
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   siteSettings,
   book,
   homePage,
   aboutPage,
+  blogIntro,
   endorsement,
   excerpt,
   blogPost,

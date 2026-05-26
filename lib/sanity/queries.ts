@@ -51,21 +51,37 @@ export const aboutPageQuery = `*[_type == "aboutPage"][0]{
 
 export const excerptsQuery = `*[_type == "excerpt"] | order(chapterNumber asc){
   _id,
-  chapterNumber,
-  chapterLabel,
+  "chapter": chapterLabel,
+  "chapterNum": chapterNumber,
   title,
+  setting,
+  pages,
+  readMin,
+  callsign,
+  tag,
+  photo,
+  opener,
+  preview,
   body,
-  heroImage
+  inlineImage
 }`;
 
 export const blogPostsQuery = `*[_type == "blogPost"] | order(date desc){
   _id,
   title,
   date,
-  summary,
+  kicker,
+  lede,
+  "excerpt": summary,
   body,
-  featuredImage,
   signOff
+}`;
+
+export const blogIntroQuery = `*[_type == "blogIntro"][0]{
+  kicker,
+  question,
+  lede,
+  body
 }`;
 
 export const pressItemsQuery = `*[_type == "pressItem"] | order(order asc, date desc){
