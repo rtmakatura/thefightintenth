@@ -38,7 +38,7 @@ export type HomePage = {
 export type Endorsement = {
   _id: string;
   name: string;
-  title?: string;
+  role?: string;
   detail?: string;
   quote: string;
   rank?: string;

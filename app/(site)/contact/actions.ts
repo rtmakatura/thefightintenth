@@ -2,6 +2,9 @@
 
 import { Resend } from 'resend';
 import { AUTHOR_EMAIL } from '@/lib/content';
+import { sanityFetch } from '@/lib/sanity/fetch';
+import { siteSettingsQuery } from '@/lib/sanity/queries';
+import type { SiteSettings } from '@/lib/sanity/types';
 
 export type ContactPayload = {
   channel: string;
@@ -117,8 +120,16 @@ export async function submitContact(p: ContactPayload): Promise<SubmitResult> {
 
   // Destination: with the dev sender, Resend will only deliver to the
   // email used to register the Resend account. Allow CONTACT_TO to
-  // override AUTHOR_EMAIL until a verified domain is in place.
-  const to = process.env.CONTACT_TO?.trim() || AUTHOR_EMAIL;
+  // override Sanity's siteSettings.contactEmail (falling back to AUTHOR_EMAIL
+  // if Sanity is unreachable) until a verified domain is in place.
+  let settingsEmail: string | undefined;
+  try {
+    const settings = await sanityFetch<SiteSettings | null>(siteSettingsQuery);
+    settingsEmail = settings?.contactEmail;
+  } catch {
+    // fall through to AUTHOR_EMAIL
+  }
+  const to = process.env.CONTACT_TO?.trim() || settingsEmail || AUTHOR_EMAIL;
 
   try {
     const result = await resend.emails.send({

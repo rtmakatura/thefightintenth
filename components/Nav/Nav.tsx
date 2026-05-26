@@ -6,7 +6,11 @@ import { useEffect, useRef, useState } from 'react';
 import { NAV_LINKS } from '@/lib/content';
 import styles from './Nav.module.css';
 
-export default function Nav() {
+type Props = {
+  title?: string;
+};
+
+export default function Nav({ title = "The Fightin' Tenth" }: Props = {}) {
   const pathname = usePathname();
   // Only the home hero gets a transparent nav. Every other route opens with a
   // dark PageHead, so the nav should be solid from the first paint.
@@ -63,7 +67,7 @@ export default function Nav() {
       <div className={styles.inner}>
         <Link href="/" className={styles.brand} aria-label="Home">
           <span className={styles.brandTick} aria-hidden="true" />
-          The Fightin&apos; Tenth
+          {title}
         </Link>
 
         <div className={styles.links} aria-hidden={!open}>

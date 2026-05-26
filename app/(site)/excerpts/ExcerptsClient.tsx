@@ -3,12 +3,12 @@
 import Image from 'next/image';
 import { Fragment, useEffect, useState } from 'react';
 import Reveal from '@/components/Reveal';
-import { ORDER_URL, type Excerpt } from '@/lib/content';
+import { type Excerpt } from '@/lib/content';
 import styles from './excerpts.module.css';
 
-type Props = { excerpts: Excerpt[] };
+type Props = { excerpts: Excerpt[]; preorderUrl: string };
 
-export default function ExcerptsClient({ excerpts }: Props) {
+export default function ExcerptsClient({ excerpts, preorderUrl }: Props) {
   const [active, setActive] = useState<Excerpt | null>(null);
 
   return (
@@ -18,7 +18,13 @@ export default function ExcerptsClient({ excerpts }: Props) {
           <Spread key={e.title} excerpt={e} idx={i} onOpen={() => setActive(e)} />
         ))}
       </div>
-      {active && <ExcerptModal excerpt={active} onClose={() => setActive(null)} />}
+      {active && (
+        <ExcerptModal
+          excerpt={active}
+          preorderUrl={preorderUrl}
+          onClose={() => setActive(null)}
+        />
+      )}
     </>
   );
 }
@@ -106,7 +112,15 @@ function Spread({
   );
 }
 
-function ExcerptModal({ excerpt, onClose }: { excerpt: Excerpt; onClose: () => void }) {
+function ExcerptModal({
+  excerpt,
+  preorderUrl,
+  onClose,
+}: {
+  excerpt: Excerpt;
+  preorderUrl: string;
+  onClose: () => void;
+}) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -172,7 +186,7 @@ function ExcerptModal({ excerpt, onClose }: { excerpt: Excerpt; onClose: () => v
             Continue the story — the book is available now.
           </div>
           <a
-            href={ORDER_URL}
+            href={preorderUrl}
             className="btn btn-dark"
             target="_blank"
             rel="noreferrer"

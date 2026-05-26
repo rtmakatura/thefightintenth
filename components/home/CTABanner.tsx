@@ -1,10 +1,17 @@
 import Reveal from '@/components/Reveal';
-import { ORDER_URL } from '@/lib/content';
+import { releaseStatus } from '@/lib/sanity/release';
 import styles from './CTABanner.module.css';
 
 const WHO = ['Veterans', 'Aviation buffs', 'Cold War history fans', 'Squadron families'];
 
-export default function CTABanner() {
+type Props = {
+  preorderUrl: string;
+  pubDate?: string;
+};
+
+export default function CTABanner({ preorderUrl, pubDate }: Props) {
+  const status = releaseStatus(pubDate);
+
   return (
     <section className={styles.banner}>
       <div className={styles.bg} aria-hidden="true" />
@@ -39,12 +46,12 @@ export default function CTABanner() {
 
       <Reveal>
         <a
-          href={ORDER_URL}
+          href={preorderUrl}
           className="btn btn-outline-light"
           target="_blank"
           rel="noreferrer"
         >
-          Order on Amazon
+          {status.ctaLabel}
         </a>
       </Reveal>
     </section>

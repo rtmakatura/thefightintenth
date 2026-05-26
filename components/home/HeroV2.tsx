@@ -1,8 +1,29 @@
-import Link from 'next/link';
-import { ORDER_URL } from '@/lib/content';
+import { releaseStatus } from '@/lib/sanity/release';
 import styles from './HeroV2.module.css';
 
-export default function HeroV2() {
+type Props = {
+  preorderUrl: string;
+  pubDate?: string;
+};
+
+function formatStylizedDate(pubDateIso?: string): string {
+  if (!pubDateIso) return '05.05.26';
+  const d = new Date(pubDateIso);
+  if (Number.isNaN(d.getTime())) return '05.05.26';
+  const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(d.getUTCDate()).padStart(2, '0');
+  const yy = String(d.getUTCFullYear()).slice(-2);
+  return `${mm}.${dd}.${yy}`;
+}
+
+export default function HeroV2({ preorderUrl, pubDate }: Props) {
+  const status = releaseStatus(pubDate);
+  const stylizedDate = formatStylizedDate(pubDate);
+  const statusLine =
+    status.released && status.formattedDate
+      ? `Released ${status.formattedDate} — Available now`
+      : status.statusLine;
+
   return (
     <section className={styles.hero}>
       <div className={styles.bg} aria-hidden="true" />
@@ -53,17 +74,17 @@ export default function HeroV2() {
 
         <div className={styles.bottombar}>
           <div className={styles.pubmeta}>
-            <span className={styles.pubNum}>05.05.26</span>
-            Released May 5, 2026 — Available now
+            <span className={styles.pubNum}>{stylizedDate}</span>
+            {statusLine}
           </div>
           <div className={styles.actions}>
             <a
-              href={ORDER_URL}
+              href={preorderUrl}
               className="btn btn-outline-light"
               target="_blank"
               rel="noreferrer"
             >
-              Order on Amazon
+              {status.ctaLabel}
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
                 <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.4" />
               </svg>

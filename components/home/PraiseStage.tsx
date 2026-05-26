@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import Reveal from '@/components/Reveal';
-import { ENDORSEMENTS } from '@/lib/content';
+import type { Endorsement } from '@/lib/sanity/types';
 import styles from './PraiseStage.module.css';
 
 const FADE_MS = 400;
@@ -15,8 +15,12 @@ function trim(quote: string) {
   return quote.slice(0, MAX_LEN).replace(/[\s.,;:!?]+$/, '') + '…';
 }
 
-export default function PraiseStage() {
-  const total = ENDORSEMENTS.length;
+type Props = {
+  endorsements: Endorsement[];
+};
+
+export default function PraiseStage({ endorsements }: Props) {
+  const total = endorsements.length;
   const [idx, setIdx] = useState(0);
   const [fading, setFading] = useState(false);
   const intervalRef = useRef<number | null>(null);
@@ -30,6 +34,7 @@ export default function PraiseStage() {
   };
 
   useEffect(() => {
+    if (total === 0) return;
     intervalRef.current = window.setInterval(() => {
       setFading(true);
       window.setTimeout(() => {
@@ -42,7 +47,9 @@ export default function PraiseStage() {
     };
   }, [total]);
 
-  const e = ENDORSEMENTS[idx];
+  if (total === 0) return null;
+
+  const e = endorsements[idx];
 
   return (
     <section className="section section-dark">
@@ -70,7 +77,7 @@ export default function PraiseStage() {
           </div>
 
           <div className={styles.controls}>
-            {ENDORSEMENTS.map((_, i) => (
+            {endorsements.map((_, i) => (
               <button
                 key={i}
                 type="button"

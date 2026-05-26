@@ -1,6 +1,9 @@
 import PageHead from '@/components/PageHead/PageHead';
 import Reveal from '@/components/Reveal';
 import { AUTHOR_EMAIL } from '@/lib/content';
+import { sanityFetch } from '@/lib/sanity/fetch';
+import { siteSettingsQuery } from '@/lib/sanity/queries';
+import type { SiteSettings } from '@/lib/sanity/types';
 import ContactForm from './ContactForm';
 import FaqAccordion from './FaqAccordion';
 import styles from './contact.module.css';
@@ -9,7 +12,12 @@ export const metadata = {
   title: "Contact — The Fightin' Tenth",
 };
 
-export default function ContactPage() {
+export const revalidate = 60;
+
+export default async function ContactPage() {
+  const settings = await sanityFetch<SiteSettings | null>(siteSettingsQuery);
+  const email = settings?.contactEmail ?? AUTHOR_EMAIL;
+
   return (
     <main className={styles.stage}>
       <PageHead eyebrow="Open Channel" title="Contact" />
@@ -50,7 +58,7 @@ export default function ContactPage() {
                 <div className={styles.chTag}>Direct · Author</div>
                 <h3 className={styles.chTitle}>Write to Mak</h3>
                 <div className={styles.chAddr}>
-                  <a href={`mailto:${AUTHOR_EMAIL}`}>{AUTHOR_EMAIL}</a>
+                  <a href={`mailto:${email}`}>{email}</a>
                 </div>
                 <p className={styles.chNote}>
                   Reader notes, press &amp; media, talks &amp; appearances, signed copies,

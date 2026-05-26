@@ -1,13 +1,21 @@
 import PageHead from '@/components/PageHead/PageHead';
 import Reveal from '@/components/Reveal';
 import ExcerptsClient from './ExcerptsClient';
-import { EXCERPTS } from '@/lib/content';
+import { EXCERPTS, ORDER_URL } from '@/lib/content';
+import { sanityFetch } from '@/lib/sanity/fetch';
+import { siteSettingsQuery } from '@/lib/sanity/queries';
+import type { SiteSettings } from '@/lib/sanity/types';
 
 export const metadata = {
   title: "Excerpts — The Fightin' Tenth",
 };
 
-export default function ExcerptsPage() {
+export const revalidate = 60;
+
+export default async function ExcerptsPage() {
+  const settings = await sanityFetch<SiteSettings | null>(siteSettingsQuery);
+  const preorderUrl = settings?.preorderUrl ?? ORDER_URL;
+
   const ordered = [...EXCERPTS].sort(
     (a, b) => Number(a.chapterNum) - Number(b.chapterNum),
   );
@@ -25,7 +33,7 @@ export default function ExcerptsPage() {
               callsigns, and the ninety-six-hour grind of a NATO TAC EVAL.
             </p>
           </Reveal>
-          <ExcerptsClient excerpts={ordered} />
+          <ExcerptsClient excerpts={ordered} preorderUrl={preorderUrl} />
         </div>
       </section>
     </main>

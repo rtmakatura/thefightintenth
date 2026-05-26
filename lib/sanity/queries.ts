@@ -27,7 +27,7 @@ export const homePageQuery = `*[_type == "homePage"][0]{
 export const featuredEndorsementsQuery = `*[_type == "endorsement" && featured == true] | order(order asc){
   _id,
   name,
-  title,
+  "role": title,
   detail,
   quote
 }`;
@@ -35,7 +35,7 @@ export const featuredEndorsementsQuery = `*[_type == "endorsement" && featured =
 export const allEndorsementsQuery = `*[_type == "endorsement"] | order(order asc){
   _id,
   name,
-  title,
+  "role": title,
   detail,
   quote,
   rank

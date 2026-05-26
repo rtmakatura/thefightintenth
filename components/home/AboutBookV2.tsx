@@ -1,7 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Reveal from '@/components/Reveal';
-import { ORDER_URL } from '@/lib/content';
+import { urlFor } from '@/lib/sanity/image';
+import { releaseStatus } from '@/lib/sanity/release';
+import type { Book } from '@/lib/sanity/types';
 import styles from './AboutBookV2.module.css';
 
 const ACTS = [
@@ -28,15 +30,30 @@ const ACTS = [
   },
 ];
 
-const META: { lbl: string; val: string; small?: boolean }[] = [
-  { lbl: 'Pages', val: '282' },
-  { lbl: 'Softcover', val: '$18.95' },
-  { lbl: 'Hardcover', val: '$28.95' },
-  { lbl: 'Pub Date', val: 'May 5, 2026' },
-  { lbl: 'Publisher', val: 'Koehler Books', small: true },
-];
+type Props = {
+  preorderUrl: string;
+  book?: Book | null;
+};
 
-export default function AboutBookV2() {
+export default function AboutBookV2({ preorderUrl, book }: Props) {
+  const status = releaseStatus(book?.pubDate);
+
+  const coverSrc = book?.coverImage
+    ? urlFor(book.coverImage).width(576).height(871).fit('crop').url()
+    : '/assets/cover.jpg';
+
+  const coverAlt =
+    (book?.coverImage as { alt?: string } | undefined)?.alt ??
+    "The Fightin' Tenth book cover";
+
+  const meta: { lbl: string; val: string; small?: boolean }[] = [
+    { lbl: 'Pages', val: book?.pageCount ? String(book.pageCount) : '282' },
+    { lbl: 'Softcover', val: book?.softcover?.price ?? '$18.95' },
+    { lbl: 'Hardcover', val: book?.hardcover?.price ?? '$28.95' },
+    { lbl: 'Pub Date', val: status.formattedDate ?? 'May 5, 2026' },
+    { lbl: 'Publisher', val: 'Koehler Books', small: true },
+  ];
+
   return (
     <section className="section section-light">
       <div className="container">
@@ -44,16 +61,17 @@ export default function AboutBookV2() {
           <Reveal className={styles.coverStage}>
             <div className={styles.plinth}>
               <Image
-                src="/assets/cover.jpg"
+                src={coverSrc}
                 width={576}
                 height={871}
-                alt="The Fightin' Tenth book cover"
+                alt={coverAlt}
                 className={styles.coverImg}
                 priority
+                unoptimized={coverSrc.startsWith('http')}
               />
             </div>
             <div className={styles.metaStrip}>
-              {META.map((m) => (
+              {meta.map((m) => (
                 <div className={styles.metaRow} key={m.lbl}>
                   <span className={styles.metaLbl}>{m.lbl}</span>
                   <span
@@ -111,12 +129,12 @@ export default function AboutBookV2() {
             <Reveal>
               <div className={styles.cta}>
                 <a
-                  href={ORDER_URL}
+                  href={preorderUrl}
                   className="btn btn-dark"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Order on Amazon
+                  {status.ctaLabel}
                 </a>
                 <Link href="/excerpts" className="btn btn-ghost">
                   Read Excerpts

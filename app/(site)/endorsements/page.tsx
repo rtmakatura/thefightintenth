@@ -1,11 +1,16 @@
 import PageHead from '@/components/PageHead/PageHead';
 import Reveal from '@/components/Reveal';
-import { ENDORSEMENTS, type Endorsement } from '@/lib/content';
+import { ENDORSEMENTS } from '@/lib/content';
+import { sanityFetch } from '@/lib/sanity/fetch';
+import { allEndorsementsQuery } from '@/lib/sanity/queries';
+import type { Endorsement } from '@/lib/sanity/types';
 import styles from './endorsements.module.css';
 
 export const metadata = {
   title: "Endorsements — The Fightin' Tenth",
 };
+
+export const revalidate = 60;
 
 function getInitials(name: string): string {
   const clean = name
@@ -48,11 +53,19 @@ function pickPunchLine(quote: string): string {
   return punch.replace(/^["']|["']$/g, '').trim();
 }
 
-function Spread({ e, idx, total }: { e: Endorsement; idx: number; total: number }) {
+type SpreadEndorsement = {
+  name: string;
+  role?: string;
+  detail?: string;
+  quote: string;
+};
+
+function Spread({ e, idx, total }: { e: SpreadEndorsement; idx: number; total: number }) {
   const flip = idx % 2 === 1;
   const cs = getCallsign(e.name);
   const initials = getInitials(e.name);
   const punch = pickPunchLine(e.quote);
+  const role = e.role ?? '';
 
   // Body without the punch sentence (so the pull quote isn't redundant).
   const sentencesIn = e.quote.match(/[^.!?]+[.!?]+/g) || [e.quote];
@@ -73,12 +86,12 @@ function Spread({ e, idx, total }: { e: Endorsement; idx: number; total: number 
               {initials}
             </div>
             <div className={styles.plateCs}>
-              {cs ? `"${cs}"` : `— ${rankBadge(e.role)}`}
+              {cs ? `"${cs}"` : `— ${rankBadge(role)}`}
             </div>
             <div className={styles.plateMeta}>
               <span>PLATE {String(idx + 1).padStart(2, '0')}</span>
               <span className={styles.plateDot} />
-              <span>{rankBadge(e.role)}</span>
+              <span>{rankBadge(role)}</span>
               <span className={styles.plateDot} />
               <span>10 TFS</span>
             </div>
@@ -108,7 +121,7 @@ function Spread({ e, idx, total }: { e: Endorsement; idx: number; total: number 
           <div className={styles.attrib}>
             <div className={styles.attribL}>
               <div className={styles.name}>{e.name}</div>
-              <div className={styles.role}>{e.role}</div>
+              <div className={styles.role}>{role}</div>
               {e.detail && <div className={styles.detail}>{e.detail}</div>}
             </div>
             <div>
@@ -121,8 +134,12 @@ function Spread({ e, idx, total }: { e: Endorsement; idx: number; total: number 
   );
 }
 
-export default function EndorsementsPage() {
-  const total = ENDORSEMENTS.length;
+export default async function EndorsementsPage() {
+  const fetched = await sanityFetch<Endorsement[]>(allEndorsementsQuery);
+  const list: SpreadEndorsement[] =
+    fetched && fetched.length > 0 ? fetched : ENDORSEMENTS;
+  const total = list.length;
+
   return (
     <main>
       <PageHead eyebrow="Praise for the Book" title="Endorsements" />
@@ -151,7 +168,7 @@ export default function EndorsementsPage() {
               </header>
             </Reveal>
 
-            {ENDORSEMENTS.map((e, i) => (
+            {list.map((e, i) => (
               <Spread key={e.name} e={e} idx={i} total={total} />
             ))}
 
