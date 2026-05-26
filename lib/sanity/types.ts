@@ -95,10 +95,46 @@ export type BlogIntro = {
 export type PressItem = {
   _id: string;
   outlet: string;
+  type?: string;
+  kicker?: string;
   date?: string;
   headline: string;
   description?: string;
   url: string;
+  featured?: boolean;
+  order?: number;
+};
+
+export type PressPage = {
+  factSheet?: {
+    title?: string;
+    subtitle?: string;
+    author?: string;
+    pubDate?: string;
+    publisher?: string;
+    format?: string;
+    pages?: string;
+    isbn?: string;
+    genre?: string;
+    price?: string;
+  };
+  contact?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    hours?: string;
+  };
+  availability?: string[];
+  talkingPoints?: string[];
+  pullQuotes?: { quote: string; who?: string }[];
+  appearances?: {
+    date?: string;
+    weekday?: string;
+    time?: string;
+    venue: string;
+    kind?: string;
+    url?: string;
+  }[];
 };
 
 export type PhotoPlate = {

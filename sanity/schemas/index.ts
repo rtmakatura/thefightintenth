@@ -9,6 +9,7 @@ import { excerpt } from './documents/excerpt';
 import { homePage } from './documents/homePage';
 import { photoChapter } from './documents/photoChapter';
 import { pressItem } from './documents/pressItem';
+import { pressPage } from './documents/pressPage';
 import { siteSettings } from './documents/siteSettings';
 
 export const SINGLETON_TYPES = [
@@ -17,6 +18,7 @@ export const SINGLETON_TYPES = [
   'homePage',
   'aboutPage',
   'blogIntro',
+  'pressPage',
 ] as const;
 
 export const schemaTypes: SchemaTypeDefinition[] = [
@@ -25,6 +27,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   homePage,
   aboutPage,
   blogIntro,
+  pressPage,
   endorsement,
   excerpt,
   blogPost,

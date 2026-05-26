@@ -25,10 +25,14 @@ export const structure: StructureResolver = (S) =>
         .title('Blog Intro')
         .id('blogIntro')
         .child(S.document().schemaType('blogIntro').documentId('blogIntro')),
+      S.listItem()
+        .title('Press Page')
+        .id('pressPage')
+        .child(S.document().schemaType('pressPage').documentId('pressPage')),
       S.divider(),
       S.documentTypeListItem('endorsement').title('Endorsements'),
       S.documentTypeListItem('excerpt').title('Excerpts'),
       S.documentTypeListItem('blogPost').title('Blog Posts'),
-      S.documentTypeListItem('pressItem').title('Press'),
+      S.documentTypeListItem('pressItem').title('Press Coverage'),
       S.documentTypeListItem('photoChapter').title('Photo Chapters'),
     ]);

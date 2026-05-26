@@ -94,10 +94,23 @@ export const blogIntroQuery = `*[_type == "blogIntro"][0]{
 export const pressItemsQuery = `*[_type == "pressItem"] | order(order asc, date desc){
   _id,
   outlet,
+  type,
+  kicker,
   date,
   headline,
   description,
-  url
+  url,
+  featured,
+  order
+}`;
+
+export const pressPageQuery = `*[_type == "pressPage"][0]{
+  factSheet,
+  contact,
+  availability,
+  talkingPoints,
+  pullQuotes,
+  appearances
 }`;
 
 export const photoChaptersQuery = `*[_type == "photoChapter"] | order(order asc){
