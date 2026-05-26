@@ -1,95 +1,79 @@
-export const revalidate = 60;
+import PageHead from '@/components/PageHead/PageHead';
+import Reveal from '@/components/Reveal';
+import { AUTHOR_EMAIL } from '@/lib/content';
+import ContactForm from './ContactForm';
+import FaqAccordion from './FaqAccordion';
+import styles from './contact.module.css';
 
-import FadeIn from "@/components/FadeIn";
-import SectionHeading from "@/components/SectionHeading";
-import { sanityFetch } from "@/lib/sanity/fetch";
-import { siteSettingsQuery } from "@/lib/sanity/queries";
-import type { SiteSettings } from "@/lib/sanity/types";
+export const metadata = {
+  title: "Contact — The Fightin' Tenth",
+};
 
-export const metadata = { title: "Contact | The Fightin' Tenth" };
-
-export default async function ContactPageRoute() {
-  const settings = await sanityFetch<SiteSettings | null>(siteSettingsQuery);
-  const email = settings?.contactEmail;
-
+export default function ContactPage() {
   return (
-    <section className="max-w-2xl mx-auto px-6 py-20 md:py-28">
-      <FadeIn className="mb-10">
-        <p className="text-xs uppercase tracking-[0.3em] text-accent mb-3">
-          Get in touch
-        </p>
-        <SectionHeading light>Contact</SectionHeading>
-        <p className="mt-4 text-base md:text-lg text-tan max-w-2xl">
-          Press, speaking, or general inquiries.
-        </p>
-        {email && (
-          <p className="mt-3 text-sm text-tan">
-            Or email directly:{" "}
-            <a
-              href={`mailto:${email}`}
-              className="text-accent hover:underline"
-            >
-              {email}
-            </a>
-          </p>
-        )}
-      </FadeIn>
+    <main className={styles.stage}>
+      <PageHead eyebrow="Open Channel" title="Contact" />
 
-      <FadeIn delay={100}>
-        <form className="space-y-5">
-          <div>
-            <label
-              htmlFor="name"
-              className="block text-xs uppercase tracking-widest text-tan mb-2"
-            >
-              Name
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              className="w-full bg-rich-mid border border-rich-mid focus:border-accent outline-none px-4 py-3 text-text-light"
-            />
+      <div className={styles.readout}>
+        <div className="container">
+          <div className={styles.readoutRow}>
+            <span>
+              <span className={styles.blink} />
+              <b>STATION</b> Winter Garden, FL · 28.56°N · 81.58°W
+            </span>
+            <span>
+              <b>HRS</b> Mon–Fri · 0900–1700 ET
+            </span>
+            <span>
+              <b>REPLY</b> 3–5 business days
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <section className="section section-light">
+        <div className="container">
+          <Reveal className="text-center">
+            <p className="lede" style={{ maxWidth: '720px', margin: '0 auto 0.4rem' }}>
+              Whether you flew with the Tenth, write for an outlet I&apos;ve never heard of,
+              or just want a copy of the book signed for your father — pick a channel and
+              write.
+            </p>
+            <p style={{ color: 'var(--text-sec)', maxWidth: '720px', margin: '0 auto' }}>
+              I read every message myself.
+            </p>
+          </Reveal>
+
+          <Reveal>
+            <div className={styles.directWrap}>
+              <div className={styles.directCard}>
+                <div className={styles.chTag}>Direct · Author</div>
+                <h3 className={styles.chTitle}>Write to Mak</h3>
+                <div className={styles.chAddr}>
+                  <a href={`mailto:${AUTHOR_EMAIL}`}>{AUTHOR_EMAIL}</a>
+                </div>
+                <p className={styles.chNote}>
+                  Reader notes, press &amp; media, talks &amp; appearances, signed copies,
+                  squadron stories — all routed through the form below or sent directly to the
+                  address above.
+                </p>
+              </div>
+            </div>
+          </Reveal>
+
+          <div className="container-narrow" style={{ padding: 0 }}>
+            <Reveal>
+              <ContactForm />
+            </Reveal>
           </div>
 
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-xs uppercase tracking-widest text-tan mb-2"
-            >
-              Email
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              className="w-full bg-rich-mid border border-rich-mid focus:border-accent outline-none px-4 py-3 text-text-light"
-            />
+          <div className="container-narrow" style={{ padding: 0 }}>
+            <Reveal>
+              <FaqAccordion />
+            </Reveal>
           </div>
-
-          <div>
-            <label
-              htmlFor="message"
-              className="block text-xs uppercase tracking-widest text-tan mb-2"
-            >
-              Message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              rows={5}
-              className="w-full bg-rich-mid border border-rich-mid focus:border-accent outline-none px-4 py-3 text-text-light"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="inline-flex items-center justify-center px-6 py-3 bg-accent hover:bg-accent-dark text-text-light text-sm font-medium tracking-wide transition-colors"
-          >
-            Send message
-          </button>
-        </form>
-      </FadeIn>
-    </section>
+        </div>
+      </section>
+    </main>
   );
 }

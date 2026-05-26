@@ -1,0 +1,40 @@
+.head {
+  background: var(--dark-bg);
+  color: var(--text-light);
+  padding: 9rem 1.5rem 4.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(237, 237, 240, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(237, 237, 240, 0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.eyebrow {
+  position: relative;
+  margin-bottom: 0.8rem;
+}
+
+.title {
+  font-size: clamp(2.5rem, 5vw, 3.8rem);
+  color: var(--text-light);
+  margin: 0;
+  position: relative;
+}
+
+.bar {
+  width: 60px;
+  height: 2px;
+  background: var(--accent);
+  margin: 1.6rem auto 0;
+  position: relative;
+}

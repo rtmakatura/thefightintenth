@@ -1,89 +1,130 @@
-export const revalidate = 60;
+import PageHead from '@/components/PageHead/PageHead';
+import Reveal from '@/components/Reveal';
+import { BLOG, BLOG_INTRO } from '@/lib/content';
+import styles from './blog.module.css';
 
-import FadeIn from "@/components/FadeIn";
-import PortableText from "@/components/PortableText";
-import SectionHeading from "@/components/SectionHeading";
-import { sanityFetch } from "@/lib/sanity/fetch";
-import { urlFor } from "@/lib/sanity/image";
-import { blogPostsQuery } from "@/lib/sanity/queries";
-import type { BlogPost } from "@/lib/sanity/types";
+export const metadata = {
+  title: "From the Author — The Fightin' Tenth",
+};
 
-export const metadata = { title: "Blog | The Fightin' Tenth" };
+const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-function formatDate(iso: string): string {
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return iso;
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC",
-  });
+function parseDate(s: string): { month: string; day: string; year: string } {
+  const d = new Date(s);
+  if (isNaN(d.getTime())) return { month: '', day: '', year: '' };
+  return {
+    month: MONTHS[d.getMonth()],
+    day: String(d.getDate()).padStart(2, '0'),
+    year: String(d.getFullYear()),
+  };
 }
 
-export default async function BlogPageRoute() {
-  const posts = await sanityFetch<BlogPost[]>(blogPostsQuery);
+function slugify(s: string): string {
+  return s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
 
+export default function BlogPage() {
   return (
-    <section className="max-w-4xl mx-auto px-6 py-20 md:py-28">
-      <FadeIn className="mb-10">
-        <p className="text-xs uppercase tracking-[0.3em] text-accent mb-3">
-          Field notes
-        </p>
-        <SectionHeading light>Blog</SectionHeading>
-        <p className="mt-4 text-base md:text-lg text-tan max-w-2xl">
-          Dispatches, updates, and behind-the-scenes.
-        </p>
-      </FadeIn>
+    <main>
+      <PageHead eyebrow="Notes & Dispatches" title="From the Author" />
 
-      {posts.length === 0 ? (
-        <FadeIn delay={100}>
-          <p className="text-tan italic">No posts yet.</p>
-        </FadeIn>
-      ) : (
-        <ul className="space-y-12">
-          {posts.map((post, i) => {
-            const featuredUrl = post.featuredImage
-              ? urlFor(post.featuredImage).width(1200).quality(85).url()
-              : null;
-            return (
-              <FadeIn key={post._id} delay={i * 60}>
-                <li className="border-b border-rich-mid pb-12 last:border-b-0">
-                  <p className="text-xs uppercase tracking-widest text-tan mb-2">
-                    {formatDate(post.date)}
-                  </p>
-                  <h3 className="font-display text-2xl md:text-3xl text-text-light">
-                    {post.title}
-                  </h3>
+      <section className={styles.stage}>
+        <div className="container">
+          <Reveal className={styles.ledeWrap}>
+            <div className={styles.ornament}>Field Notes</div>
+            <p className={styles.ledeIntro}>
+              Reflections on service, the squadron, and the things worth remembering —
+              filed as they come.
+            </p>
+          </Reveal>
 
-                  {featuredUrl && (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img
-                      src={featuredUrl}
-                      alt={post.featuredImage?.alt ?? ""}
-                      className="mt-5 w-full rounded-md"
-                    />
-                  )}
+          <Reveal className={styles.intro}>
+            <div className={styles.kicker}>{BLOG_INTRO.kicker}</div>
+            <p className={styles.question}>{BLOG_INTRO.question}</p>
+            <h2 className={styles.lede}>{BLOG_INTRO.lede}</h2>
+            <div className={styles.dotRule} aria-hidden="true">
+              <span className={styles.line} />
+              <span className={styles.dot} />
+              <span className={styles.line} />
+            </div>
+            <div className={styles.body}>
+              {BLOG_INTRO.body.map((p, i) => (
+                <p key={i}>{p}</p>
+              ))}
+              <div className={styles.introSig}>— Mak</div>
+            </div>
+          </Reveal>
 
-                  {post.summary && (
-                    <p className="text-tan mt-4 leading-relaxed">{post.summary}</p>
-                  )}
-
-                  {post.body && post.body.length > 0 && (
-                    <div className="text-tan mt-4 space-y-4 leading-relaxed">
-                      <PortableText value={post.body} />
+          <Reveal className={styles.indexWrap}>
+            <nav className={styles.index} aria-label="Posts in this dispatch">
+              {BLOG.map((post, i) => {
+                const { month, day } = parseDate(post.date);
+                return (
+                  <a key={post.title} href={`#post-${slugify(post.title)}`}>
+                    <div className={styles.ixNum}>№ {String(i + 1).padStart(2, '0')}</div>
+                    <div className={styles.ixTitle}>{post.title}</div>
+                    <div className={styles.ixDate}>
+                      {month} {day}
                     </div>
-                  )}
+                  </a>
+                );
+              })}
+            </nav>
+          </Reveal>
 
-                  {post.signOff && (
-                    <p className="mt-6 italic text-tan/80">— {post.signOff}</p>
-                  )}
-                </li>
-              </FadeIn>
+          {BLOG.map((post, i) => {
+            const { month, day, year } = parseDate(post.date);
+            const total = BLOG.length;
+            const showRule = post.body.length > 4;
+            const ruleAfterIdx = Math.floor(post.body.length / 2) - 1;
+
+            return (
+              <Reveal key={post.title}>
+                <article className={styles.post} id={`post-${slugify(post.title)}`}>
+                  <header className={styles.postHead}>
+                    <div className={styles.datestamp}>
+                      <span className={styles.month}>{month}</span>
+                      <span className={styles.day}>{day}</span>
+                      <span className={styles.year}>{year}</span>
+                      <span className={styles.postNum}>
+                        № {String(i + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
+                      </span>
+                    </div>
+                    <div className={styles.headText}>
+                      {post.kicker && <div className={styles.kickerLine}>{post.kicker}</div>}
+                      <h2 className={styles.title}>{post.title}</h2>
+                      {post.lede && <p className={styles.deck}>{post.lede}</p>}
+                    </div>
+                  </header>
+
+                  <div className={styles.bodyContent}>
+                    {post.body.map((para, j) => (
+                      <div key={j}>
+                        <p>{para}</p>
+                        {showRule && j === ruleAfterIdx && (
+                          <div className={styles.dotRule} aria-hidden="true">
+                            <span className={styles.line} />
+                            <span className={styles.dot} />
+                            <span className={styles.line} />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  <footer className={styles.foot}>
+                    <span className={styles.signature}>— Mak</span>
+                    <span className={styles.tag}>{post.kicker || 'Dispatch'}</span>
+                  </footer>
+                </article>
+              </Reveal>
             );
           })}
-        </ul>
-      )}
-    </section>
+        </div>
+      </section>
+    </main>
   );
 }

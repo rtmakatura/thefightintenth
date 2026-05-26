@@ -1,177 +1,176 @@
-export const revalidate = 60;
+import PageHead from '@/components/PageHead/PageHead';
+import Reveal from '@/components/Reveal';
+import { ENDORSEMENTS, type Endorsement } from '@/lib/content';
+import styles from './endorsements.module.css';
 
-import FadeIn from "@/components/FadeIn";
-import SectionHeading from "@/components/SectionHeading";
-import { sanityFetch } from "@/lib/sanity/fetch";
-import { allEndorsementsQuery } from "@/lib/sanity/queries";
-import type { Endorsement } from "@/lib/sanity/types";
-
-export const metadata = { title: "Endorsements | The Fightin' Tenth" };
-
-const FEATURED_NAME = 'Edward "Julio" Houle';
-
-type RankKind =
-  | "first-lt"
-  | "lt-col"
-  | "col"
-  | "brig-gen"
-  | "tsgt"
-  | "civilian-author";
-
-const RANK_BY_NAME: Record<string, RankKind> = {
-  'Joey "BooBoo" Booher': "first-lt",
-  'Terry "Ragin" Bull': "lt-col",
-  "Tod Gohl": "tsgt",
-  'Doug "Frenchie" French': "col",
-  'Paul "Doodle" Dordal': "brig-gen",
-  "Stephen Reed": "civilian-author",
-  "Richard 'Mongoose' Hess": "lt-col",
+export const metadata = {
+  title: "Endorsements — The Fightin' Tenth",
 };
 
-const INSIGNIA_SRC: Record<RankKind, string> = {
-  "first-lt": "/insignia/US-O2_insignia.svg",
-  "lt-col": "/insignia/US-O5_insignia.svg",
-  col: "/insignia/US-O6_insignia.svg",
-  "brig-gen": "/insignia/US-O7_insignia.svg",
-  tsgt: "/insignia/tsgt.svg",
-  "civilian-author": "/insignia/book.svg",
-};
+function getInitials(name: string): string {
+  const clean = name
+    .replace(/["'][^"']*["']/g, '')
+    .replace(/\([^)]*\)/g, '')
+    .trim();
+  const parts = clean.split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return '—';
+  if (parts.length === 1) return (parts[0][0] || '—').toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
 
-export default async function EndorsementsPageRoute() {
-  const endorsements = await sanityFetch<Endorsement[]>(allEndorsementsQuery);
+function getCallsign(name: string): string | null {
+  const m = name.match(/["']([^"']+)["']/);
+  return m ? m[1] : null;
+}
 
-  const featured = endorsements.find((e) => e.name === FEATURED_NAME);
-  const rest = endorsements.filter((e) => e.name !== FEATURED_NAME);
+function rankBadge(role: string): string {
+  const r = role.toLowerCase();
+  if (r.includes('brigadier general')) return 'BG';
+  if (r.includes('general')) return 'GEN';
+  if (r.includes('colonel') && r.includes('lt')) return 'LtC';
+  if (r.includes('colonel')) return 'COL';
+  if (r.includes('major')) return 'MAJ';
+  if (r.includes('captain')) return 'CPT';
+  if (r.includes('lieutenant')) return 'LT';
+  if (r.includes('tsgt') || r.includes('sergeant')) return 'TSgt';
+  if (r.includes('pilot')) return 'PLT';
+  if (r.includes('penguin') || r.includes('random house') || r.includes('markets')) return 'PUB';
+  if (r.includes('author')) return 'AUT';
+  return '—';
+}
+
+function pickPunchLine(quote: string): string {
+  const sentences = quote.match(/[^.!?]+[.!?]+/g) || [quote];
+  const punch =
+    sentences
+      .map((s) => s.trim())
+      .find((s) => s.length > 24 && s.length < 130) || sentences[0];
+  return punch.replace(/^["']|["']$/g, '').trim();
+}
+
+function Spread({ e, idx, total }: { e: Endorsement; idx: number; total: number }) {
+  const flip = idx % 2 === 1;
+  const cs = getCallsign(e.name);
+  const initials = getInitials(e.name);
+  const punch = pickPunchLine(e.quote);
+
+  // Body without the punch sentence (so the pull quote isn't redundant).
+  const sentencesIn = e.quote.match(/[^.!?]+[.!?]+/g) || [e.quote];
+  const punchSrc =
+    sentencesIn.map((s) => s.trim()).find((s) => s.length > 24 && s.length < 130) ||
+    sentencesIn[0];
+  const body = e.quote.replace(punchSrc, '').replace(/\s\s+/g, ' ').trim();
+  const drop = (body[0] || e.quote[0] || '"').toUpperCase();
+  const bodyRest = body.slice(1);
 
   return (
-    <section className="bg-dark-bg">
-      <div className="max-w-[780px] mx-auto px-6 py-20 md:py-28">
-        <FadeIn className="mb-16 text-center">
-          <SectionHeading light center>
-            Endorsements
-          </SectionHeading>
-        </FadeIn>
-
-        {featured && (
-          <FadeIn delay={120} className="mb-20">
-            <FeaturedQuote endorsement={featured} />
-          </FadeIn>
-        )}
-
-        <div aria-hidden className="mx-auto mb-14 h-px w-16 bg-accent/40" />
-
-        <div className="relative">
-          <div
-            aria-hidden
-            className="absolute left-3 top-3 bottom-3 w-px bg-accent/40"
-          />
-
-          <ul className="flex flex-col gap-12 pl-14 md:pl-16">
-            {rest.map((e, i) => {
-              const rank =
-                (e.rank as RankKind | undefined) ?? RANK_BY_NAME[e.name];
-              return (
-                <li key={e._id} className="relative">
-                  <div
-                    aria-hidden
-                    className="absolute top-9 -left-14 md:-left-16 flex items-center gap-2 md:gap-3"
-                  >
-                    {rank && <RankMark kind={rank} />}
-                    <span className="h-px w-3 md:w-4 bg-accent/60" />
-                  </div>
-                  <FadeIn delay={i * 60}>
-                    <EndorsementBlockquote endorsement={e} />
-                  </FadeIn>
-                </li>
-              );
-            })}
-          </ul>
+    <Reveal>
+      <article className={`${styles.spread} ${flip ? styles.flip : ''}`}>
+        <div className={styles.plate}>
+          <div className={styles.plateShade} aria-hidden="true" />
+          <div className={styles.plateContent}>
+            <div className={styles.plateInit} aria-hidden="true">
+              {initials}
+            </div>
+            <div className={styles.plateCs}>
+              {cs ? `"${cs}"` : `— ${rankBadge(e.role)}`}
+            </div>
+            <div className={styles.plateMeta}>
+              <span>PLATE {String(idx + 1).padStart(2, '0')}</span>
+              <span className={styles.plateDot} />
+              <span>{rankBadge(e.role)}</span>
+              <span className={styles.plateDot} />
+              <span>10 TFS</span>
+            </div>
+            <div className={styles.plateBar} />
+          </div>
+          <div className={`${styles.plateCorner} ${styles.cornerTL}`} aria-hidden="true" />
+          <div className={`${styles.plateCorner} ${styles.cornerBR}`} aria-hidden="true" />
         </div>
-      </div>
-    </section>
-  );
-}
-
-function RankMark({ kind }: { kind: RankKind }) {
-  const src = INSIGNIA_SRC[kind];
-  return (
-    <span
-      aria-hidden
-      className="block h-6 w-6 flex-shrink-0 bg-accent"
-      style={{
-        maskImage: `url(${src})`,
-        maskSize: "contain",
-        maskRepeat: "no-repeat",
-        maskPosition: "center",
-        WebkitMaskImage: `url(${src})`,
-        WebkitMaskSize: "contain",
-        WebkitMaskRepeat: "no-repeat",
-        WebkitMaskPosition: "center",
-      }}
-    />
-  );
-}
-
-function FeaturedQuote({ endorsement }: { endorsement: Endorsement }) {
-  return (
-    <figure className="text-center">
-      <div
-        aria-hidden
-        className="font-display italic text-accent/40 leading-none select-none"
-        style={{ fontSize: "6rem" }}
-      >
-        &ldquo;
-      </div>
-      <blockquote className="-mt-4 md:-mt-6">
-        <p className="font-display italic text-text-light text-xl md:text-2xl lg:text-[1.75rem] leading-snug text-balance">
-          {endorsement.quote}
-        </p>
-      </blockquote>
-      <figcaption className="mt-10">
-        <span aria-hidden className="mx-auto mb-5 block h-px w-16 bg-accent/60" />
-        <p className="font-body uppercase tracking-[0.2em] text-sm text-accent">
-          {endorsement.name}
-        </p>
-        <p className="mt-2 text-text-light/60 text-sm">
-          {endorsement.title}
-          {endorsement.detail && (
-            <>
-              {" · "}
-              <span className="italic">{endorsement.detail}</span>
-            </>
-          )}
-        </p>
-      </figcaption>
-    </figure>
-  );
-}
-
-function EndorsementBlockquote({ endorsement }: { endorsement: Endorsement }) {
-  return (
-    <article
-      className="bg-white rounded-md px-8 py-8"
-      style={{
-        boxShadow:
-          "0 4px 20px -4px rgba(20, 20, 40, 0.12), 0 2px 8px -2px rgba(72, 148, 208, 0.08)",
-      }}
-    >
-      <blockquote>
-        <p className="font-display italic text-text-sec text-base md:text-lg leading-relaxed">
-          &ldquo;{endorsement.quote}&rdquo;
-        </p>
-      </blockquote>
-
-      <footer className="mt-6">
-        <p className="font-bold text-text-pri">{endorsement.name}</p>
-        {endorsement.title && (
-          <p className="text-text-sec text-sm mt-0.5">{endorsement.title}</p>
-        )}
-        {endorsement.detail && (
-          <p className="italic text-accent-dark text-sm mt-0.5">
-            {endorsement.detail}
+        <div className={styles.text}>
+          <div className={styles.kicker}>
+            <span className={styles.bar} />
+            Endorsement № {String(idx + 1).padStart(2, '0')} of{' '}
+            {String(total).padStart(2, '0')}
+            <span className={styles.bar} />
+            <span className={styles.readtime}>3 MIN</span>
+          </div>
+          <h3 className={styles.pull}>{punch}</h3>
+          <div className={styles.folioRule}>
+            <span className={styles.folioTick} />
+            <span className={styles.folioName}>{e.name}</span>
+            <span className={styles.folioTick} />
+          </div>
+          <p className={styles.body}>
+            <span className={styles.drop}>{drop}</span>
+            {bodyRest}
           </p>
-        )}
-      </footer>
-    </article>
+          <div className={styles.attrib}>
+            <div className={styles.attribL}>
+              <div className={styles.name}>{e.name}</div>
+              <div className={styles.role}>{e.role}</div>
+              {e.detail && <div className={styles.detail}>{e.detail}</div>}
+            </div>
+            <div>
+              <div className={styles.sig}>№ {String(idx + 1).padStart(2, '0')}</div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </Reveal>
+  );
+}
+
+export default function EndorsementsPage() {
+  const total = ENDORSEMENTS.length;
+  return (
+    <main>
+      <PageHead eyebrow="Praise for the Book" title="Endorsements" />
+
+      <section className="section section-light">
+        <div className="container">
+          <div className={styles.editorial}>
+            <Reveal>
+              <header className={styles.masthead}>
+                <div className={styles.mastheadL}>
+                  <div className={styles.issue}>ISSUE 10 · SPRING 2026</div>
+                  <div className={styles.folio}>VOL. I · The Squadron Reader</div>
+                </div>
+                <div className={styles.mastheadC}>
+                  <h2 className={styles.mhTitle}>PRAISE</h2>
+                  <div className={styles.mhSub}>EIGHT VOICES · ONE SQUADRON</div>
+                </div>
+                <div className={styles.mastheadR}>
+                  <div className={`${styles.issue} ${styles.right}`}>
+                    PP. 01—{String(total * 2).padStart(2, '0')}
+                  </div>
+                  <div className={`${styles.folio} ${styles.right}`}>
+                    A FIGHTIN&apos; TENTH PORTFOLIO
+                  </div>
+                </div>
+              </header>
+            </Reveal>
+
+            {ENDORSEMENTS.map((e, i) => (
+              <Spread key={e.name} e={e} idx={i} total={total} />
+            ))}
+
+            <Reveal>
+              <footer className={styles.colophon}>
+                <div className={styles.colRule} />
+                <div className={styles.colText}>
+                  <span>END OF PORTFOLIO</span>
+                  <span className={styles.colDot} />
+                  <span>SET IN PLAYFAIR DISPLAY &amp; SOURCE SANS 3</span>
+                  <span className={styles.colDot} />
+                  <span>THE FIGHTIN&apos; TENTH · KOEHLER BOOKS · 2026</span>
+                </div>
+                <div className={styles.colRule} />
+              </footer>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }

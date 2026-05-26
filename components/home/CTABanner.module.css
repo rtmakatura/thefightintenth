@@ -1,0 +1,81 @@
+.banner {
+  position: relative;
+  padding: 7rem 1.5rem;
+  text-align: center;
+  color: var(--text-light);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/cockpit.jpg');
+  background-size: cover;
+  background-position: center;
+  z-index: -2;
+  filter: grayscale(0.2);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(20, 20, 24, 0.88) 0%,
+    rgba(20, 20, 24, 0.78) 50%,
+    rgba(20, 20, 24, 0.92) 100%
+  );
+  z-index: -1;
+}
+
+.vrule {
+  width: 1px;
+  height: 80px;
+  background: var(--accent);
+  margin: 0 auto 2rem;
+}
+
+.kickerCenter {
+  display: flex;
+  justify-content: center;
+}
+
+.who {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0;
+  margin: 2rem auto 2.5rem;
+  max-width: 760px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+  line-height: 1.8;
+  color: var(--cream);
+}
+
+.who > span {
+  padding: 0 0.9rem;
+  border-right: 1px solid rgba(237, 237, 240, 0.3);
+}
+.who > span:last-child { border-right: 0; }
+
+@media (max-width: 600px) {
+  .who > span {
+    border-right: 0;
+    padding: 0.2rem 0;
+    flex: 0 0 100%;
+    text-align: center;
+  }
+}
+
+.text {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  line-height: 1.5;
+  color: var(--cream);
+  max-width: 620px;
+  margin: 0 auto 2rem;
+}
