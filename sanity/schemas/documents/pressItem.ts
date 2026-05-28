@@ -13,6 +13,30 @@ export const pressItem = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: 'type',
+      title: 'Type',
+      type: 'string',
+      description: 'Tag shown above the headline, e.g. "Feature", "Review", "Interview".',
+      options: {
+        list: [
+          'Feature',
+          'Review',
+          'Interview',
+          'Conversation',
+          'Profile',
+          'Radio',
+          'Podcast',
+          'Op-Ed',
+        ],
+      },
+    }),
+    defineField({
+      name: 'kicker',
+      title: 'Kicker',
+      type: 'string',
+      description: 'Short outlet detail, e.g. "Digital magazine", "Episode 142 · 58 min".',
+    }),
+    defineField({
       name: 'date',
       title: 'Date',
       type: 'date',
@@ -26,7 +50,7 @@ export const pressItem = defineType({
     }),
     defineField({
       name: 'description',
-      title: 'Description',
+      title: 'Deck / Description',
       type: 'text',
       rows: 3,
     }),
@@ -35,6 +59,13 @@ export const pressItem = defineType({
       title: 'URL',
       type: 'url',
       validation: (r) => r.required(),
+    }),
+    defineField({
+      name: 'featured',
+      title: 'Featured (top of page)',
+      type: 'boolean',
+      description: 'Shown as the large featured article at the top of the press page.',
+      initialValue: false,
     }),
     defineField({
       name: 'order',

@@ -1,0 +1,110 @@
+.section {
+  position: relative;
+  background: #0b0b0e;
+  color: var(--text-light);
+  padding: 6rem 1.5rem;
+  overflow: hidden;
+  text-align: center;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(72, 148, 208, 0.12), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(237, 237, 240, 0.02) 0 1px, transparent 1px 80px),
+    repeating-linear-gradient(90deg, rgba(237, 237, 240, 0.02) 0 1px, transparent 1px 80px);
+  pointer-events: none;
+}
+
+.mark {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  margin: 0 auto 2.5rem;
+}
+
+.ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(237, 237, 240, 0.3);
+  border-radius: 50%;
+}
+
+.ring2 {
+  position: absolute;
+  inset: 16px;
+  border: 1px solid rgba(72, 148, 208, 0.5);
+  border-radius: 50%;
+}
+
+.x {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 5rem;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.bottomLabel {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0b0b0e;
+  padding: 0 12px;
+  font-size: 0.62rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--tan);
+}
+
+.topLabel {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0b0b0e;
+  padding: 0 12px;
+  font-size: 0.62rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.tick {
+  position: absolute;
+  background: rgba(237, 237, 240, 0.3);
+}
+.t1 { top: -2px; left: 50%; width: 1px; height: 14px; margin-left: -0.5px; }
+.t2 { bottom: -2px; left: 50%; width: 1px; height: 14px; margin-left: -0.5px; }
+.t3 { top: 50%; left: -2px; width: 14px; height: 1px; margin-top: -0.5px; }
+.t4 { top: 50%; right: -2px; width: 14px; height: 1px; margin-top: -0.5px; }
+
+.mantra {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  color: var(--text-light);
+  max-width: 760px;
+  margin: 0 auto 1rem;
+  line-height: 1.4;
+  position: relative;
+}
+
+.src {
+  display: block;
+  font-style: normal;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--tan);
+  margin-top: 1.5rem;
+}

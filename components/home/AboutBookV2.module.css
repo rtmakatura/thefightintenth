@@ -1,0 +1,142 @@
+.grid {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+@media (max-width: 920px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .coverStage {
+    max-width: 280px;
+    margin: 0 auto;
+  }
+}
+
+.coverStage {
+  position: sticky;
+  top: 110px;
+  perspective: 1200px;
+}
+
+.plinth {
+  position: relative;
+  transform: rotateY(-6deg) rotateX(2deg);
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease;
+}
+.plinth:hover { transform: rotateY(-2deg) rotateX(0deg); }
+
+.coverImg {
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+  box-shadow:
+    0 40px 80px -20px rgba(20, 30, 50, 0.5),
+    0 18px 40px -10px rgba(20, 30, 50, 0.4),
+    -6px 0 0 rgba(20, 20, 24, 0.18);
+}
+
+.metaStrip {
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--hairline);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.metaRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  font-size: 0.85rem;
+}
+
+.metaLbl {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--tan);
+  font-weight: 600;
+}
+
+.metaVal {
+  font-family: var(--font-display);
+  color: var(--text-pri);
+  font-weight: 700;
+}
+
+.h2 {
+  font-size: clamp(2.2rem, 4vw, 3rem);
+}
+.h2Em {
+  color: var(--text-sec);
+  font-weight: 400;
+  font-style: italic;
+}
+
+.acts {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.act {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--hairline);
+}
+
+/* mimic :last-child border-bottom on the wrapping Reveal — we just style the act */
+.acts > :last-child .act {
+  border-bottom: 1px solid var(--hairline);
+}
+
+.actNum {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 2.6rem;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.actLabel {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-sec);
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.actTitle {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.6rem;
+  letter-spacing: -0.005em;
+  color: var(--text-pri);
+}
+
+.actBody {
+  color: var(--text-sec);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.cta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2.5rem;
+}

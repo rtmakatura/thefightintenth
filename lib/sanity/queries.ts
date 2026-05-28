@@ -27,7 +27,7 @@ export const homePageQuery = `*[_type == "homePage"][0]{
 export const featuredEndorsementsQuery = `*[_type == "endorsement" && featured == true] | order(order asc){
   _id,
   name,
-  title,
+  "role": title,
   detail,
   quote
 }`;
@@ -35,7 +35,7 @@ export const featuredEndorsementsQuery = `*[_type == "endorsement" && featured =
 export const allEndorsementsQuery = `*[_type == "endorsement"] | order(order asc){
   _id,
   name,
-  title,
+  "role": title,
   detail,
   quote,
   rank
@@ -51,34 +51,79 @@ export const aboutPageQuery = `*[_type == "aboutPage"][0]{
 
 export const excerptsQuery = `*[_type == "excerpt"] | order(chapterNumber asc){
   _id,
-  chapterNumber,
-  chapterLabel,
+  "chapter": chapterLabel,
+  "chapterNum": chapterNumber,
   title,
+  setting,
+  pages,
+  readMin,
+  callsign,
+  tag,
+  photo,
+  opener,
+  preview,
   body,
-  heroImage
+  "inlineImage": select(
+    defined(inlineImage.image) => {
+      "image": inlineImage.image,
+      "alt": inlineImage.alt,
+      "caption": inlineImage.caption,
+      "afterParagraph": inlineImage.afterParagraph
+    }
+  )
 }`;
 
 export const blogPostsQuery = `*[_type == "blogPost"] | order(date desc){
   _id,
   title,
   date,
-  summary,
+  kicker,
+  lede,
+  "excerpt": summary,
   body,
-  featuredImage,
   signOff
+}`;
+
+export const blogIntroQuery = `*[_type == "blogIntro"][0]{
+  kicker,
+  question,
+  lede,
+  body
 }`;
 
 export const pressItemsQuery = `*[_type == "pressItem"] | order(order asc, date desc){
   _id,
   outlet,
+  type,
+  kicker,
   date,
   headline,
   description,
-  url
+  url,
+  featured,
+  order
 }`;
 
-export const photosQuery = `*[_type == "photo"] | order(order asc){
+export const pressPageQuery = `*[_type == "pressPage"][0]{
+  factSheet,
+  contact,
+  availability,
+  talkingPoints,
+  pullQuotes,
+  appearances
+}`;
+
+export const photoChaptersQuery = `*[_type == "photoChapter"] | order(order asc){
   _id,
-  image,
-  caption
+  order,
+  kicker,
+  title,
+  dates,
+  blurb,
+  plates[]{
+    image,
+    span,
+    label,
+    caption
+  }
 }`;

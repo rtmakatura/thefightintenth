@@ -38,7 +38,7 @@ export type HomePage = {
 export type Endorsement = {
   _id: string;
   name: string;
-  title?: string;
+  role?: string;
   detail?: string;
   quote: string;
   rank?: string;
@@ -54,34 +54,102 @@ export type AboutPage = {
 
 export type Excerpt = {
   _id: string;
-  chapterNumber: number;
-  chapterLabel: string;
+  chapter: string;
+  chapterNum: number;
   title: string;
-  body?: PortableTextBlock[];
-  heroImage?: SanityImage;
+  setting?: string;
+  pages?: string;
+  readMin?: number;
+  callsign?: string;
+  tag?: string;
+  photo?: SanityImage;
+  opener?: string;
+  preview?: string;
+  body?: string[];
+  inlineImage?: {
+    image?: SanityImage;
+    alt?: string;
+    caption?: string;
+    afterParagraph?: number;
+  };
 };
 
 export type BlogPost = {
   _id: string;
   title: string;
   date: string;
-  summary?: string;
-  body?: PortableTextBlock[];
-  featuredImage?: SanityImage;
+  kicker?: string;
+  lede?: string;
+  excerpt?: string;
+  body?: string[];
   signOff?: string;
+};
+
+export type BlogIntro = {
+  kicker?: string;
+  question?: string;
+  lede?: string;
+  body?: string[];
 };
 
 export type PressItem = {
   _id: string;
   outlet: string;
+  type?: string;
+  kicker?: string;
   date?: string;
   headline: string;
   description?: string;
   url: string;
+  featured?: boolean;
+  order?: number;
 };
 
-export type Photo = {
-  _id: string;
+export type PressPage = {
+  factSheet?: {
+    title?: string;
+    subtitle?: string;
+    author?: string;
+    pubDate?: string;
+    publisher?: string;
+    format?: string;
+    pages?: string;
+    isbn?: string;
+    genre?: string;
+    price?: string;
+  };
+  contact?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    hours?: string;
+  };
+  availability?: string[];
+  talkingPoints?: string[];
+  pullQuotes?: { quote: string; who?: string }[];
+  appearances?: {
+    date?: string;
+    weekday?: string;
+    time?: string;
+    venue: string;
+    kind?: string;
+    url?: string;
+  }[];
+};
+
+export type PhotoPlate = {
   image: SanityImage;
+  span?: 'wide' | 'tall' | 'wide-tall' | 'square';
+  label?: string;
   caption?: string;
+};
+
+export type PhotoChapter = {
+  _id: string;
+  order?: number;
+  kicker?: string;
+  title: string;
+  dates?: string;
+  blurb?: string;
+  plates?: PhotoPlate[];
 };

@@ -19,6 +19,19 @@ export const blogPost = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: 'kicker',
+      title: 'Kicker',
+      type: 'string',
+      description: 'Eyebrow text above the title, e.g. "Holiday dispatch".',
+    }),
+    defineField({
+      name: 'lede',
+      title: 'Lede',
+      type: 'text',
+      rows: 2,
+      description: 'One-line deck that runs under the title.',
+    }),
+    defineField({
       name: 'summary',
       title: 'Summary',
       type: 'text',
@@ -27,16 +40,10 @@ export const blogPost = defineType({
     }),
     defineField({
       name: 'body',
-      title: 'Body',
+      title: 'Body Paragraphs',
       type: 'array',
-      of: [{ type: 'block' }],
-    }),
-    defineField({
-      name: 'featuredImage',
-      title: 'Featured Image',
-      type: 'image',
-      options: { hotspot: true },
-      fields: [defineField({ name: 'alt', title: 'Alt Text', type: 'string' })],
+      of: [{ type: 'text', rows: 6 }],
+      description: 'Each item is one paragraph of the post.',
     }),
     defineField({
       name: 'signOff',

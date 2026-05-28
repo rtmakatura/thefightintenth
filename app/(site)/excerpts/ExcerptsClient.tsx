@@ -1,0 +1,242 @@
+'use client';
+
+import Image from 'next/image';
+import { Fragment, useEffect, useState } from 'react';
+import Reveal from '@/components/Reveal';
+import { urlFor } from '@/lib/sanity/image';
+import { toParagraphText } from '@/lib/sanity/portable';
+import type { Excerpt } from '@/lib/sanity/types';
+import styles from './excerpts.module.css';
+
+type Props = { excerpts: Excerpt[]; preorderUrl: string };
+
+function photoUrl(image: Excerpt['photo']): string | null {
+  if (!image) return null;
+  try {
+    return urlFor(image).width(1400).height(900).fit('crop').auto('format').url();
+  } catch {
+    return null;
+  }
+}
+
+function inlineUrl(image: NonNullable<Excerpt['inlineImage']>['image']): string | null {
+  if (!image) return null;
+  try {
+    return urlFor(image).width(1400).auto('format').url();
+  } catch {
+    return null;
+  }
+}
+
+export default function ExcerptsClient({ excerpts, preorderUrl }: Props) {
+  const [active, setActive] = useState<Excerpt | null>(null);
+
+  return (
+    <>
+      <div className={styles.stack}>
+        {excerpts.map((e, i) => (
+          <Spread key={e._id} excerpt={e} idx={i} onOpen={() => setActive(e)} />
+        ))}
+      </div>
+      {active && (
+        <ExcerptModal
+          excerpt={active}
+          preorderUrl={preorderUrl}
+          onClose={() => setActive(null)}
+        />
+      )}
+    </>
+  );
+}
+
+function Spread({
+  excerpt,
+  idx,
+  onOpen,
+}: {
+  excerpt: Excerpt;
+  idx: number;
+  onOpen: () => void;
+}) {
+  const flip = idx % 2 === 1;
+  const opener = excerpt.opener ?? '';
+  const drop = opener.charAt(0);
+  const openerRest = opener.slice(1);
+  const preview = excerpt.preview ?? '';
+  const restOfPreview = opener ? preview.slice(opener.length).trim() : preview;
+  const numeral = String(excerpt.chapterNum).padStart(2, '0');
+  const photo = photoUrl(excerpt.photo);
+
+  return (
+    <Reveal>
+      <article
+        className={`${styles.spread} ${flip ? styles.flip : ''}`}
+        onClick={onOpen}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onOpen();
+          }
+        }}
+        aria-label={`Read excerpt: ${excerpt.title}`}
+      >
+        {photo && (
+          <div className={styles.photo}>
+            <Image
+              src={photo}
+              alt=""
+              width={1400}
+              height={900}
+              className={styles.photoImg}
+              unoptimized
+            />
+            <div className={styles.photoOverlay} aria-hidden="true" />
+            <div className={styles.photoCap}>
+              <span className={styles.capK}>Plate {String(idx + 1).padStart(2, '0')}</span>
+              {excerpt.setting && <span className={styles.capV}>{excerpt.setting}</span>}
+            </div>
+          </div>
+        )}
+        <div className={styles.text}>
+          <div className={styles.numeral} aria-hidden="true">
+            {numeral}
+          </div>
+          <div className={styles.meta}>
+            <span>{excerpt.chapter}</span>
+            {excerpt.pages && (
+              <>
+                <span className={styles.dot} />
+                <span>{excerpt.pages}</span>
+              </>
+            )}
+            {excerpt.readMin != null && (
+              <>
+                <span className={styles.dot} />
+                <span>{excerpt.readMin} min</span>
+              </>
+            )}
+          </div>
+          <h3 className={styles.title}>{excerpt.title}</h3>
+          {opener && (
+            <p className={styles.opener}>
+              <span className={styles.dropcap}>{drop}</span>
+              {openerRest}
+            </p>
+          )}
+          {restOfPreview && <p className={styles.rest}>{restOfPreview}</p>}
+          <div className={styles.foot}>
+            <button
+              type="button"
+              className={styles.cta}
+              onClick={(ev) => {
+                ev.stopPropagation();
+                onOpen();
+              }}
+            >
+              Continue reading
+              <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden="true">
+                <path d="M1 5h11M8.5 1L13 5l-4.5 4" stroke="currentColor" strokeWidth="1.4" />
+              </svg>
+            </button>
+            {excerpt.tag && <span className={styles.tag}>{excerpt.tag}</span>}
+          </div>
+        </div>
+      </article>
+    </Reveal>
+  );
+}
+
+function ExcerptModal({
+  excerpt,
+  preorderUrl,
+  onClose,
+}: {
+  excerpt: Excerpt;
+  preorderUrl: string;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+
+  const body = (excerpt.body ?? []).map(toParagraphText);
+  const inline = excerpt.inlineImage;
+  const inlineSrc = inline ? inlineUrl(inline.image) : null;
+
+  return (
+    <div
+      className={styles.modalBg}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={excerpt.title}
+    >
+      <div
+        className={styles.modalCard}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          className={styles.modalClose}
+          onClick={onClose}
+          aria-label="Close"
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" strokeWidth="1.5" />
+          </svg>
+        </button>
+        <div className={styles.modalChap}>{excerpt.chapter}</div>
+        <h2 className={styles.modalTitle}>{excerpt.title}</h2>
+        <div className={styles.modalRule} />
+        <div className={styles.modalBody}>
+          {body.map((p, i) => (
+            <Fragment key={i}>
+              <p>{p}</p>
+              {inlineSrc && inline?.afterParagraph === i && (
+                <figure className={styles.modalFigure}>
+                  <Image
+                    src={inlineSrc}
+                    alt={inline.alt ?? ''}
+                    width={1400}
+                    height={900}
+                    className={styles.modalFigImg}
+                    unoptimized
+                  />
+                  {inline.caption && (
+                    <figcaption className={styles.modalFigCap}>
+                      {inline.caption}
+                    </figcaption>
+                  )}
+                </figure>
+              )}
+            </Fragment>
+          ))}
+        </div>
+        <div className={styles.modalFoot}>
+          <div className={styles.modalFootText}>
+            Continue the story — the book is available now.
+          </div>
+          <a
+            href={preorderUrl}
+            className="btn btn-dark"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Order on Amazon
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
