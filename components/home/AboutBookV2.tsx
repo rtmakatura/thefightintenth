@@ -3,10 +3,10 @@ import Image from 'next/image';
 import Reveal from '@/components/Reveal';
 import { urlFor } from '@/lib/sanity/image';
 import { releaseStatus } from '@/lib/sanity/release';
-import type { Book } from '@/lib/sanity/types';
+import type { Act, Book } from '@/lib/sanity/types';
 import styles from './AboutBookV2.module.css';
 
-const ACTS = [
+const DEFAULT_ACTS: Act[] = [
   {
     num: 'I.',
     label: 'Act One · 1987–1989',
@@ -30,12 +30,28 @@ const ACTS = [
   },
 ];
 
+const DEFAULT_LEDE =
+  "Behind the wire of one of NATO's most elite tactical fighter squadrons — the 10th — during the tense final years of the Cold War and into Operation Desert Storm. Part history, part military life, part personal transformation.";
+
 type Props = {
   preorderUrl: string;
   book?: Book | null;
+  kicker?: string;
+  heading?: string;
+  headingEm?: string;
+  lede?: string;
+  acts?: Act[];
 };
 
-export default function AboutBookV2({ preorderUrl, book }: Props) {
+export default function AboutBookV2({
+  preorderUrl,
+  book,
+  kicker,
+  heading,
+  headingEm,
+  lede,
+  acts,
+}: Props) {
   const status = releaseStatus(book?.pubDate);
 
   const coverSrc = book?.coverImage
@@ -53,6 +69,8 @@ export default function AboutBookV2({ preorderUrl, book }: Props) {
     { lbl: 'Pub Date', val: status.formattedDate ?? 'May 5, 2026' },
     { lbl: 'Publisher', val: 'Koehler Books', small: true },
   ];
+
+  const actList = acts && acts.length > 0 ? acts : DEFAULT_ACTS;
 
   return (
     <section className="section section-light">
@@ -89,14 +107,16 @@ export default function AboutBookV2({ preorderUrl, book }: Props) {
             <Reveal>
               <div className="kicker">
                 <span className="bar" />
-                The Book
+                {kicker ?? 'The Book'}
               </div>
             </Reveal>
             <Reveal>
               <h2 className={styles.h2}>
-                A squadron, a Viper,
+                {heading ?? 'A squadron, a Viper,'}
                 <br />
-                <em className={styles.h2Em}>and the years that defined them.</em>
+                <em className={styles.h2Em}>
+                  {headingEm ?? 'and the years that defined them.'}
+                </em>
               </h2>
             </Reveal>
             <Reveal>
@@ -105,15 +125,13 @@ export default function AboutBookV2({ preorderUrl, book }: Props) {
 
             <Reveal>
               <p className="lede" style={{ maxWidth: '58ch' }}>
-                Behind the wire of one of NATO&apos;s most elite tactical fighter squadrons —
-                the 10th — during the tense final years of the Cold War and into Operation
-                Desert Storm. Part history, part military life, part personal transformation.
+                {lede ?? DEFAULT_LEDE}
               </p>
             </Reveal>
 
             <div className={styles.acts}>
-              {ACTS.map((a, i) => (
-                <Reveal key={a.num} delay={(i + 1) as 1 | 2 | 3}>
+              {actList.map((a, i) => (
+                <Reveal key={i} delay={(i + 1) as 1 | 2 | 3}>
                   <div className={styles.act}>
                     <div className={styles.actNum}>{a.num}</div>
                     <div>

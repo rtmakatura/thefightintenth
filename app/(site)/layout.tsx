@@ -16,6 +16,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       <Footer
         title={settings?.title}
         author={settings?.author}
+        publisher={settings?.publisher}
         social={settings?.social}
       />
     </>

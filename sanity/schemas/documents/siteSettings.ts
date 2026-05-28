@@ -47,6 +47,12 @@ export const siteSettings = defineType({
       options: { collapsible: true, collapsed: false },
     }),
     defineField({
+      name: 'publisher',
+      title: 'Publisher Name',
+      type: 'string',
+      description: 'Shown in the footer ("Published by …") and copyright line.',
+    }),
+    defineField({
       name: 'shareImage',
       title: 'Share Image',
       type: 'image',

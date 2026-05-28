@@ -1,6 +1,7 @@
+import type { TelemetryItem } from '@/lib/sanity/types';
 import styles from './Telemetry.module.css';
 
-const ITEMS = [
+const DEFAULTS: TelemetryItem[] = [
   { em: '10TFS', text: 'HAHN AB' },
   { text: '49°56′N · 7°16′E' },
   { em: 'SABRES', text: '· NATO TAC EVAL · 1989' },
@@ -10,9 +11,15 @@ const ITEMS = [
   { text: 'PUB DATE 05.05.26' },
 ];
 
-export default function Telemetry() {
+type Props = {
+  items?: TelemetryItem[];
+};
+
+export default function Telemetry({ items }: Props = {}) {
+  const list = items && items.length > 0 ? items : DEFAULTS;
+
   const renderItems = () =>
-    ITEMS.map((it, i) => (
+    list.map((it, i) => (
       <span key={i}>
         {it.em ? <span className={styles.em}>{it.em}</span> : null}
         {it.em ? <span className={styles.dot} aria-hidden="true" /> : null}

@@ -3,6 +3,7 @@ import styles from './Footer.module.css';
 type Props = {
   title?: string;
   author?: string;
+  publisher?: string;
   social?: {
     facebook?: string;
     linkedin?: string;
@@ -13,9 +14,11 @@ type Props = {
 export default function Footer({
   title = "The Fightin' Tenth",
   author = 'Captain Michael Makatura',
+  publisher = 'Koehler Books',
   social,
 }: Props = {}) {
   const hasSocial = !!(social?.facebook || social?.linkedin || social?.instagram);
+  const year = new Date().getFullYear();
 
   return (
     <footer className={styles.footer}>
@@ -58,9 +61,9 @@ export default function Footer({
         </div>
       )}
 
-      <div className={styles.pubText}>Published by Koehler Books</div>
+      <div className={styles.pubText}>Published by {publisher}</div>
       <div className={styles.copy}>
-        © 2026 {author} · Published by Koehler Books · All rights reserved
+        © {year} {author} · Published by {publisher} · All rights reserved
       </div>
     </footer>
   );
