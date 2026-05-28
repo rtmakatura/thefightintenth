@@ -44,12 +44,20 @@ export type Endorsement = {
   rank?: string;
 };
 
+export type AboutPagePhoto = {
+  image?: SanityImage;
+  alt?: string;
+  caption?: string;
+};
+
 export type AboutPage = {
+  eyebrow?: string;
+  title?: string;
+  leftPhoto?: AboutPagePhoto;
+  rightPhoto?: AboutPagePhoto;
   kicker?: string;
-  lede?: string;
-  body?: PortableTextBlock[];
-  personalNote?: string;
-  portrait?: SanityImage;
+  heading?: string;
+  body?: string[];
 };
 
 export type Excerpt = {

@@ -42,11 +42,13 @@ export const allEndorsementsQuery = `*[_type == "endorsement"] | order(order asc
 }`;
 
 export const aboutPageQuery = `*[_type == "aboutPage"][0]{
+  eyebrow,
+  title,
+  leftPhoto,
+  rightPhoto,
   kicker,
-  lede,
-  body,
-  personalNote,
-  portrait
+  heading,
+  body
 }`;
 
 export const excerptsQuery = `*[_type == "excerpt"] | order(chapterNumber asc){
