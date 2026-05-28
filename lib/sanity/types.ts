@@ -11,6 +11,7 @@ export type SiteSettings = {
   author: string;
   preorderUrl?: string;
   contactEmail?: string;
+  publisher?: string;
   social?: {
     facebook?: string;
     linkedin?: string;
@@ -28,11 +29,56 @@ export type Book = {
   description?: PortableTextBlock[];
 };
 
+export type HudRow = { label?: string; value?: string; accent?: boolean };
+
+export type Act = { num?: string; label?: string; title?: string; body?: string };
+
+export type TelemetryItem = { em?: string; text: string };
+
 export type HomePage = {
-  heroImage?: SanityImage;
-  heroKicker?: string;
-  ctaBannerImage?: SanityImage;
-  ctaBannerQuote?: string;
+  hero?: {
+    bylineLabel?: string;
+    titleLine1?: string;
+    titleLine2?: string;
+    hud?: HudRow[];
+  };
+  telemetryItems?: TelemetryItem[];
+  aboutBook?: {
+    kicker?: string;
+    heading?: string;
+    headingEm?: string;
+    lede?: string;
+    acts?: Act[];
+  };
+  patchInterlude?: {
+    topLabel?: string;
+    bottomLabel?: string;
+    mantra?: string;
+    mantraSource?: string;
+  };
+  ctaBanner?: {
+    kicker?: string;
+    audiences?: string[];
+    tagline?: string;
+  };
+};
+
+export type ContactPage = {
+  readout?: {
+    stationLabel?: string;
+    stationValue?: string;
+    hoursLabel?: string;
+    hoursValue?: string;
+    replyLabel?: string;
+    replyValue?: string;
+  };
+  lede?: string;
+  subLede?: string;
+  directCard?: {
+    tag?: string;
+    title?: string;
+    note?: string;
+  };
 };
 
 export type Endorsement = {

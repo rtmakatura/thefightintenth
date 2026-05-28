@@ -4,6 +4,7 @@ export const siteSettingsQuery = `*[_type == "siteSettings"][0]{
   author,
   preorderUrl,
   contactEmail,
+  publisher,
   social,
   shareImage
 }`;
@@ -18,10 +19,18 @@ export const bookQuery = `*[_type == "book"][0]{
 }`;
 
 export const homePageQuery = `*[_type == "homePage"][0]{
-  heroImage,
-  heroKicker,
-  ctaBannerImage,
-  ctaBannerQuote
+  hero,
+  telemetryItems,
+  aboutBook,
+  patchInterlude,
+  ctaBanner
+}`;
+
+export const contactPageQuery = `*[_type == "contactPage"][0]{
+  readout,
+  lede,
+  subLede,
+  directCard
 }`;
 
 export const featuredEndorsementsQuery = `*[_type == "endorsement" && featured == true] | order(order asc){

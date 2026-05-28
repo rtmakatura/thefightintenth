@@ -1,9 +1,31 @@
 import { releaseStatus } from '@/lib/sanity/release';
+import type { HudRow } from '@/lib/sanity/types';
 import styles from './HeroV2.module.css';
 
 type Props = {
   preorderUrl: string;
   pubDate?: string;
+  bylineLabel?: string;
+  author?: string;
+  titleLine1?: string;
+  titleLine2?: string;
+  subtitle?: string;
+  hud?: HudRow[];
+};
+
+const DEFAULTS = {
+  bylineLabel: 'A memoir by',
+  author: 'Captain Michael Makatura',
+  titleLine1: "THE FIGHTIN'",
+  titleLine2: 'TENTH',
+  subtitle: 'Cold War to Desert Storm',
+  hud: [
+    { label: 'Squadron', value: '10 TFS' },
+    { label: 'Base', value: 'HAHN AB' },
+    { label: 'Airframe', value: 'F-16C', accent: true },
+    { label: 'Tail', value: 'HR-1310' },
+    { label: 'Era', value: '1989—91' },
+  ] as HudRow[],
 };
 
 function formatStylizedDate(pubDateIso?: string): string {
@@ -16,13 +38,24 @@ function formatStylizedDate(pubDateIso?: string): string {
   return `${mm}.${dd}.${yy}`;
 }
 
-export default function HeroV2({ preorderUrl, pubDate }: Props) {
+export default function HeroV2({
+  preorderUrl,
+  pubDate,
+  bylineLabel,
+  author,
+  titleLine1,
+  titleLine2,
+  subtitle,
+  hud,
+}: Props) {
   const status = releaseStatus(pubDate);
   const stylizedDate = formatStylizedDate(pubDate);
   const statusLine =
     status.released && status.formattedDate
       ? `Released ${status.formattedDate} — Available now`
       : status.statusLine;
+
+  const hudRows = hud && hud.length > 0 ? hud : DEFAULTS.hud;
 
   return (
     <section className={styles.hero}>
@@ -31,45 +64,31 @@ export default function HeroV2({ preorderUrl, pubDate }: Props) {
       <div className={styles.frame} aria-hidden="true" />
 
       <div className={styles.hud} aria-label="Mission readout">
-        <div className={styles.hudRow}>
-          <span className={styles.hudLbl}>Squadron</span>
-          <span className={styles.hudSep} />
-          <span className={styles.hudVal}>10 TFS</span>
-        </div>
-        <div className={styles.hudRow}>
-          <span className={styles.hudLbl}>Base</span>
-          <span className={styles.hudSep} />
-          <span className={styles.hudVal}>HAHN AB</span>
-        </div>
-        <div className={styles.hudRow}>
-          <span className={styles.hudLbl}>Airframe</span>
-          <span className={styles.hudSep} />
-          <span className={`${styles.hudVal} ${styles.hudValAccent}`}>F-16C</span>
-        </div>
-        <div className={styles.hudRow}>
-          <span className={styles.hudLbl}>Tail</span>
-          <span className={styles.hudSep} />
-          <span className={styles.hudVal}>HR-1310</span>
-        </div>
-        <div className={styles.hudRow}>
-          <span className={styles.hudLbl}>Era</span>
-          <span className={styles.hudSep} />
-          <span className={styles.hudVal}>1989—91</span>
-        </div>
+        {hudRows.map((row, i) => (
+          <div key={i} className={styles.hudRow}>
+            <span className={styles.hudLbl}>{row.label}</span>
+            <span className={styles.hudSep} />
+            <span
+              className={`${styles.hudVal} ${row.accent ? styles.hudValAccent : ''}`}
+            >
+              {row.value}
+            </span>
+          </div>
+        ))}
       </div>
 
       <div className={styles.poster}>
         <div className={styles.byline}>
           <span className={styles.bylineText}>
-            <span className={styles.bylineBy}>A memoir by</span>
-            Captain Michael Makatura
+            <span className={styles.bylineBy}>{bylineLabel ?? DEFAULTS.bylineLabel}</span>
+            {author ?? DEFAULTS.author}
           </span>
         </div>
 
         <h1 className={styles.title}>
-          <span className={styles.titleLine}>THE FIGHTIN&apos;</span>
-          <span className={styles.titleLine}>TENTH</span>
-          <span className={styles.titleSub}>Cold War to Desert Storm</span>
+          <span className={styles.titleLine}>{titleLine1 ?? DEFAULTS.titleLine1}</span>
+          <span className={styles.titleLine}>{titleLine2 ?? DEFAULTS.titleLine2}</span>
+          <span className={styles.titleSub}>{subtitle ?? DEFAULTS.subtitle}</span>
         </h1>
 
         <div className={styles.bottombar}>

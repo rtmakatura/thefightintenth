@@ -4,6 +4,7 @@ import { aboutPage } from './documents/aboutPage';
 import { blogIntro } from './documents/blogIntro';
 import { blogPost } from './documents/blogPost';
 import { book } from './documents/book';
+import { contactPage } from './documents/contactPage';
 import { endorsement } from './documents/endorsement';
 import { excerpt } from './documents/excerpt';
 import { homePage } from './documents/homePage';
@@ -19,6 +20,7 @@ export const SINGLETON_TYPES = [
   'aboutPage',
   'blogIntro',
   'pressPage',
+  'contactPage',
 ] as const;
 
 export const schemaTypes: SchemaTypeDefinition[] = [
@@ -28,6 +30,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   aboutPage,
   blogIntro,
   pressPage,
+  contactPage,
   endorsement,
   excerpt,
   blogPost,
