@@ -10,7 +10,7 @@ export const metadata = {
   title: "Endorsements — The Fightin' Tenth",
 };
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 function getInitials(name: string): string {
   const clean = name

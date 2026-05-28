@@ -19,7 +19,7 @@ import type {
   SiteSettings,
 } from '@/lib/sanity/types';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
   const [settings, book, endorsements, home] = await Promise.all([

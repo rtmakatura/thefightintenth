@@ -10,7 +10,7 @@ export const metadata = {
   title: "Photos — The Fightin' Tenth",
 };
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function PhotosPage() {
   const chapters = (await sanityFetch<PhotoChapter[]>(photoChaptersQuery)) ?? [];
