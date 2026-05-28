@@ -10,7 +10,7 @@ export const metadata = {
   title: "Excerpts — The Fightin' Tenth",
 };
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function ExcerptsPage() {
   const [settings, fetched] = await Promise.all([

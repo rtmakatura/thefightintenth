@@ -12,7 +12,7 @@ export const metadata = {
   title: "About the Author — The Fightin' Tenth",
 };
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 const DEFAULTS = {
   eyebrow: 'The Author',

@@ -4,7 +4,7 @@ import { sanityFetch } from '@/lib/sanity/fetch';
 import { siteSettingsQuery } from '@/lib/sanity/queries';
 import type { SiteSettings } from '@/lib/sanity/types';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function SiteLayout({ children }: { children: React.ReactNode }) {
   const settings = await sanityFetch<SiteSettings | null>(siteSettingsQuery);

@@ -9,7 +9,7 @@ export const metadata = {
   title: "Press — The Fightin' Tenth",
 };
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 function fmtDate(iso?: string): string {
   if (!iso) return '';

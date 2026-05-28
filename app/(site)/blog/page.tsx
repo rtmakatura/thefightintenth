@@ -11,7 +11,7 @@ export const metadata = {
   title: "From the Author — The Fightin' Tenth",
 };
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
