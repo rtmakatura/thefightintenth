@@ -39,7 +39,7 @@ export default async function PhotosPage() {
                 <span className={styles.v}>{totalPlates}</span>
               </div>
               <div>
-                <span className={styles.k}>Chapters</span>
+                <span className={styles.k}>Sections</span>
                 <span className={styles.v}>{chapters.length}</span>
               </div>
               <div>

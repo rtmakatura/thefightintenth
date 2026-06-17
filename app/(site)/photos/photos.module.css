@@ -120,21 +120,22 @@
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-auto-rows: 110px;
+  grid-auto-flow: dense;
   gap: 1.4rem;
 }
 
 /* span variants — applied to .plate (which is the Reveal wrapper) */
 .span_square     { grid-column: span 4; grid-row: span 3; }
 .span_wide       { grid-column: span 6; grid-row: span 3; }
-.span_tall       { grid-column: span 4; grid-row: span 4; }
-.span_wide_tall  { grid-column: span 8; grid-row: span 4; }
+.span_tall       { grid-column: span 4; grid-row: span 5; }
+.span_wide_tall  { grid-column: span 8; grid-row: span 5; }
 
 @media (max-width: 1100px) {
   .mosaic { grid-template-columns: repeat(8, 1fr); grid-auto-rows: 100px; }
   .span_square     { grid-column: span 4; grid-row: span 3; }
   .span_wide       { grid-column: span 8; grid-row: span 3; }
-  .span_tall       { grid-column: span 4; grid-row: span 4; }
-  .span_wide_tall  { grid-column: span 8; grid-row: span 4; }
+  .span_tall       { grid-column: span 4; grid-row: span 5; }
+  .span_wide_tall  { grid-column: span 8; grid-row: span 5; }
 }
 
 @media (max-width: 640px) {

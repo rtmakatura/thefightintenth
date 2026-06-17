@@ -16,10 +16,18 @@ type Flat = {
   globalIdx: number;
 };
 
-function thumbUrl(image: PhotoPlate['image']): string | null {
+const THUMB_DIMS = {
+  square: { w: 1100, h: 1100 },
+  wide: { w: 1500, h: 900 },
+  tall: { w: 900, h: 1400 },
+  'wide-tall': { w: 1600, h: 1300 },
+} as const;
+
+function thumbUrl(image: PhotoPlate['image'], span: PhotoPlate['span']): string | null {
   if (!image) return null;
+  const dims = THUMB_DIMS[span ?? 'square'] ?? THUMB_DIMS.square;
   try {
-    return urlFor(image).width(1400).height(900).fit('crop').auto('format').url();
+    return urlFor(image).width(dims.w).height(dims.h).fit('crop').auto('format').url();
   } catch {
     return null;
   }
@@ -108,7 +116,7 @@ export default function PhotosClient({ chapters }: Props) {
                 const num = plateNumberFor(ci, pi);
                 const span = p.span || 'square';
                 const fl = flat.find((f) => f.ci === ci && f.pi === pi);
-                const src = thumbUrl(p.image);
+                const src = thumbUrl(p.image, span);
                 if (!src) return null;
                 return (
                   <Reveal
