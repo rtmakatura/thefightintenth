@@ -1,6 +1,6 @@
 import PageHead from '@/components/PageHead/PageHead';
 import Reveal from '@/components/Reveal';
-import { BLOG, BLOG_INTRO } from '@/lib/content';
+import { BLOG_INTRO } from '@/lib/content';
 import { sanityFetch } from '@/lib/sanity/fetch';
 import { toParagraphText } from '@/lib/sanity/portable';
 import { blogIntroQuery, blogPostsQuery } from '@/lib/sanity/queries';
@@ -39,19 +39,7 @@ export default async function BlogPage() {
   ]);
 
   const intro: BlogIntro = fetchedIntro ?? BLOG_INTRO;
-  const posts: BlogPost[] =
-    fetchedPosts && fetchedPosts.length > 0
-      ? fetchedPosts
-      : (BLOG.map((p, i) => ({
-          _id: `fallback-${i}`,
-          title: p.title,
-          date: p.date,
-          kicker: p.kicker,
-          lede: p.lede,
-          excerpt: p.excerpt,
-          body: p.body,
-          signOff: 'Mak',
-        })) as BlogPost[]);
+  const posts: BlogPost[] = fetchedPosts ?? [];
 
   const introBody = (intro.body ?? []).map(toParagraphText);
 
