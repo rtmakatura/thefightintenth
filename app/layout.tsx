@@ -24,7 +24,7 @@ const jetbrains = JetBrains_Mono({
   variable: '--font-mono',
 });
 
-const SITE_TITLE = "The Fightin' Tenth — A Memoir by Capt. Michael Makatura";
+const SITE_TITLE = "THE FIGHTIN' TENTH — A Memoir by Capt. Michael Makatura";
 const SITE_DESCRIPTION =
   "Cold War to Desert Storm with the 10th — one of NATO's most elite fighter squadrons. A memoir by Captain Michael Makatura.";
 
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
     url: 'https://www.thefightintenth.com',
-    siteName: "The Fightin' Tenth",
+    siteName: "THE FIGHTIN' TENTH",
     type: 'website',
     locale: 'en_US',
   },

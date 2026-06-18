@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 
 export const runtime = 'nodejs';
-export const alt = "The Fightin' Tenth — A Memoir by Captain Michael Makatura";
+export const alt = "THE FIGHTIN' TENTH — A Memoir by Captain Michael Makatura";
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -22,7 +22,7 @@ async function loadGoogleFont(family: string, weight: number, text: string): Pro
 }
 
 export default async function OpengraphImage() {
-  const title = "The Fightin' Tenth";
+  const title = "THE FIGHTIN' TENTH";
   const subtitle = 'Cold War to Desert Storm';
   const eyebrow = 'A MEMOIR';
   const byline = 'BY CAPTAIN MICHAEL MAKATURA';
