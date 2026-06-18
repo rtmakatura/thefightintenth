@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   title: "The Fightin' Tenth — A Memoir by Captain Michael Makatura",
   description:
     "Behind the wire of one of NATO's most elite tactical fighter squadrons — the 10th — during the final years of the Cold War and Operation Desert Storm. A memoir by Captain Michael Makatura.",
-  metadataBase: new URL('https://www.michaelmakatura.com'),
+  metadataBase: new URL('https://www.thefightintenth.com'),
   openGraph: {
     title: "The Fightin' Tenth",
     description: 'Cold War to Desert Storm — a memoir by Captain Michael Makatura.',
