@@ -1,15 +1,19 @@
 import PageHead from '@/components/PageHead/PageHead';
 import Reveal from '@/components/Reveal';
 import { BLOG_INTRO } from '@/lib/content';
+import { pageMetadata } from '@/lib/metadata';
 import { sanityFetch } from '@/lib/sanity/fetch';
 import { toParagraphText } from '@/lib/sanity/portable';
 import { blogIntroQuery, blogPostsQuery } from '@/lib/sanity/queries';
 import type { BlogIntro, BlogPost } from '@/lib/sanity/types';
 import styles from './blog.module.css';
 
-export const metadata = {
-  title: "From the Author — The Fightin' Tenth",
-};
+export const metadata = pageMetadata({
+  path: '/blog',
+  title: "From the Author — THE FIGHTIN' TENTH",
+  description:
+    'Field notes and dispatches from Capt. Michael Makatura — reflections on service, the squadron, and the things worth remembering.',
+});
 
 export const dynamic = 'force-dynamic';
 

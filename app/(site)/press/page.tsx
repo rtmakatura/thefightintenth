@@ -1,13 +1,17 @@
 import PageHead from '@/components/PageHead/PageHead';
 import Reveal from '@/components/Reveal';
+import { pageMetadata } from '@/lib/metadata';
 import { sanityFetch } from '@/lib/sanity/fetch';
 import { pressItemsQuery, pressPageQuery } from '@/lib/sanity/queries';
 import type { PressItem, PressPage } from '@/lib/sanity/types';
 import styles from './press.module.css';
 
-export const metadata = {
-  title: "Press — The Fightin' Tenth",
-};
+export const metadata = pageMetadata({
+  path: '/press',
+  title: "Press Kit — THE FIGHTIN' TENTH",
+  description:
+    "Press resources for THE FIGHTIN' TENTH — talking points, fact sheet, author availability, and media contact.",
+});
 
 export const dynamic = 'force-dynamic';
 

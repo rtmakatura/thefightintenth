@@ -1,14 +1,18 @@
 import PageHead from '@/components/PageHead/PageHead';
 import Reveal from '@/components/Reveal';
+import { pageMetadata } from '@/lib/metadata';
 import { sanityFetch } from '@/lib/sanity/fetch';
 import { photoChaptersQuery } from '@/lib/sanity/queries';
 import type { PhotoChapter } from '@/lib/sanity/types';
 import PhotosClient from './PhotosClient';
 import styles from './photos.module.css';
 
-export const metadata = {
-  title: "Photos — The Fightin' Tenth",
-};
+export const metadata = pageMetadata({
+  path: '/photos',
+  title: "Photos — THE FIGHTIN' TENTH",
+  description:
+    "A visual memoir of the 10th Tactical Fighter Squadron — F-16s on the line, squadron life, Cold War to Desert Storm.",
+});
 
 export const dynamic = 'force-dynamic';
 

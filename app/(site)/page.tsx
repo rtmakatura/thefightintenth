@@ -5,6 +5,7 @@ import PatchInterlude from '@/components/home/PatchInterlude';
 import PraiseStage from '@/components/home/PraiseStage';
 import CTABanner from '@/components/home/CTABanner';
 import { ORDER_URL } from '@/lib/content';
+import { pageMetadata, SITE_DESCRIPTION, SITE_TITLE } from '@/lib/metadata';
 import { sanityFetch } from '@/lib/sanity/fetch';
 import {
   allEndorsementsQuery,
@@ -18,6 +19,12 @@ import type {
   HomePage,
   SiteSettings,
 } from '@/lib/sanity/types';
+
+export const metadata = pageMetadata({
+  path: '/',
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+});
 
 export const dynamic = 'force-dynamic';
 

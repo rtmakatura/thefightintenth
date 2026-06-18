@@ -2,13 +2,17 @@ import PageHead from '@/components/PageHead/PageHead';
 import Reveal from '@/components/Reveal';
 import ExcerptsClient from './ExcerptsClient';
 import { EXCERPTS, ORDER_URL } from '@/lib/content';
+import { pageMetadata } from '@/lib/metadata';
 import { sanityFetch } from '@/lib/sanity/fetch';
 import { excerptsQuery, siteSettingsQuery } from '@/lib/sanity/queries';
 import type { Excerpt, SiteSettings } from '@/lib/sanity/types';
 
-export const metadata = {
-  title: "Excerpts — The Fightin' Tenth",
-};
+export const metadata = pageMetadata({
+  path: '/excerpts',
+  title: "Read an Excerpt — THE FIGHTIN' TENTH",
+  description:
+    "Sample chapters from THE FIGHTIN' TENTH — inside the cockpit of the 10th TFS during the Cold War and Operation Desert Storm.",
+});
 
 export const dynamic = 'force-dynamic';
 

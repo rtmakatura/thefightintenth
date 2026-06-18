@@ -1,6 +1,7 @@
 import PageHead from '@/components/PageHead/PageHead';
 import Reveal from '@/components/Reveal';
 import { AUTHOR_EMAIL } from '@/lib/content';
+import { pageMetadata } from '@/lib/metadata';
 import { sanityFetch } from '@/lib/sanity/fetch';
 import { contactPageQuery, siteSettingsQuery } from '@/lib/sanity/queries';
 import type { ContactPage, SiteSettings } from '@/lib/sanity/types';
@@ -8,9 +9,12 @@ import ContactForm from './ContactForm';
 import FaqAccordion from './FaqAccordion';
 import styles from './contact.module.css';
 
-export const metadata = {
-  title: "Contact — The Fightin' Tenth",
-};
+export const metadata = pageMetadata({
+  path: '/contact',
+  title: "Contact — THE FIGHTIN' TENTH",
+  description:
+    'Reach Capt. Michael Makatura for press, podcast, speaking, or general inquiries about THE FIGHTIN’ TENTH.',
+});
 
 export const dynamic = 'force-dynamic';
 

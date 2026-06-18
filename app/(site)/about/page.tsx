@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import PageHead from '@/components/PageHead/PageHead';
 import Reveal from '@/components/Reveal';
+import { pageMetadata } from '@/lib/metadata';
 import { urlFor } from '@/lib/sanity/image';
 import { sanityFetch } from '@/lib/sanity/fetch';
 import { aboutPageQuery } from '@/lib/sanity/queries';
@@ -8,9 +9,12 @@ import { toParagraphText } from '@/lib/sanity/portable';
 import type { AboutPage, AboutPagePhoto } from '@/lib/sanity/types';
 import styles from './about.module.css';
 
-export const metadata = {
-  title: "About the Author — The Fightin' Tenth",
-};
+export const metadata = pageMetadata({
+  path: '/about',
+  title: "About Capt. Michael Makatura — THE FIGHTIN' TENTH",
+  description:
+    "Captain Michael Makatura flew F-16s with the 10th Tactical Fighter Squadron through the Cold War's final years and Operation Desert Storm.",
+});
 
 export const dynamic = 'force-dynamic';
 

@@ -1,14 +1,18 @@
 import PageHead from '@/components/PageHead/PageHead';
 import Reveal from '@/components/Reveal';
 import { ENDORSEMENTS } from '@/lib/content';
+import { pageMetadata } from '@/lib/metadata';
 import { sanityFetch } from '@/lib/sanity/fetch';
 import { allEndorsementsQuery } from '@/lib/sanity/queries';
 import type { Endorsement } from '@/lib/sanity/types';
 import styles from './endorsements.module.css';
 
-export const metadata = {
-  title: "Endorsements — The Fightin' Tenth",
-};
+export const metadata = pageMetadata({
+  path: '/endorsements',
+  title: "Endorsements — THE FIGHTIN' TENTH",
+  description:
+    "What pilots, military leaders, and readers are saying about THE FIGHTIN' TENTH by Capt. Michael Makatura.",
+});
 
 export const dynamic = 'force-dynamic';
 

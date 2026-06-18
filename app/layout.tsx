@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Playfair_Display, Source_Sans_3, JetBrains_Mono } from 'next/font/google';
+import { SITE_BASE_URL, SITE_DESCRIPTION, SITE_TITLE } from '@/lib/metadata';
 import './globals.css';
 
 const playfair = Playfair_Display({
@@ -24,18 +25,14 @@ const jetbrains = JetBrains_Mono({
   variable: '--font-mono',
 });
 
-const SITE_TITLE = "THE FIGHTIN' TENTH — A Memoir by Capt. Michael Makatura";
-const SITE_DESCRIPTION =
-  "Cold War to Desert Storm with the 10th — one of NATO's most elite fighter squadrons. A memoir by Captain Michael Makatura.";
-
 export const metadata: Metadata = {
   title: SITE_TITLE,
   description: SITE_DESCRIPTION,
-  metadataBase: new URL('https://www.thefightintenth.com'),
+  metadataBase: new URL(SITE_BASE_URL),
   openGraph: {
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    url: 'https://www.thefightintenth.com',
+    url: SITE_BASE_URL,
     siteName: "THE FIGHTIN' TENTH",
     type: 'website',
     locale: 'en_US',
