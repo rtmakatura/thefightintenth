@@ -1,12 +1,14 @@
 import Image from 'next/image';
 import PageHead from '@/components/PageHead/PageHead';
 import Reveal from '@/components/Reveal';
+import { JsonLd } from '@/components/JsonLd';
+import { buildPersonJsonLd } from '@/lib/jsonld';
 import { pageMetadata } from '@/lib/metadata';
 import { urlFor } from '@/lib/sanity/image';
 import { sanityFetch } from '@/lib/sanity/fetch';
-import { aboutPageQuery } from '@/lib/sanity/queries';
+import { aboutPageQuery, siteSettingsQuery } from '@/lib/sanity/queries';
 import { toParagraphText } from '@/lib/sanity/portable';
-import type { AboutPage, AboutPagePhoto } from '@/lib/sanity/types';
+import type { AboutPage, AboutPagePhoto, SiteSettings } from '@/lib/sanity/types';
 import styles from './about.module.css';
 
 export const metadata = pageMetadata({
@@ -52,7 +54,10 @@ function photoSrc(p: AboutPagePhoto | undefined, fallbackPath: string): string {
 }
 
 export default async function AboutPage() {
-  const data = await sanityFetch<AboutPage | null>(aboutPageQuery);
+  const [data, settings] = await Promise.all([
+    sanityFetch<AboutPage | null>(aboutPageQuery),
+    sanityFetch<SiteSettings | null>(siteSettingsQuery),
+  ]);
 
   const eyebrow = data?.eyebrow ?? DEFAULTS.eyebrow;
   const title = data?.title ?? DEFAULTS.title;
@@ -76,6 +81,7 @@ export default async function AboutPage() {
 
   return (
     <main>
+      <JsonLd data={buildPersonJsonLd(settings)} />
       <PageHead eyebrow={eyebrow} title={title} />
       <section className="section section-light">
         <div className="container-narrow">

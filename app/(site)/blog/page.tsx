@@ -1,6 +1,8 @@
 import PageHead from '@/components/PageHead/PageHead';
 import Reveal from '@/components/Reveal';
+import { JsonLd } from '@/components/JsonLd';
 import { BLOG_INTRO } from '@/lib/content';
+import { buildArticleJsonLd } from '@/lib/jsonld';
 import { pageMetadata } from '@/lib/metadata';
 import { sanityFetch } from '@/lib/sanity/fetch';
 import { toParagraphText } from '@/lib/sanity/portable';
@@ -46,9 +48,11 @@ export default async function BlogPage() {
   const posts: BlogPost[] = fetchedPosts ?? [];
 
   const introBody = (intro.body ?? []).map(toParagraphText);
+  const articleSchemas = posts.map(buildArticleJsonLd);
 
   return (
     <main>
+      {articleSchemas.length > 0 && <JsonLd data={articleSchemas} />}
       <PageHead eyebrow="Notes & Dispatches" title="From the Author" />
 
       <section className={styles.stage}>

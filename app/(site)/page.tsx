@@ -4,7 +4,9 @@ import AboutBookV2 from '@/components/home/AboutBookV2';
 import PatchInterlude from '@/components/home/PatchInterlude';
 import PraiseStage from '@/components/home/PraiseStage';
 import CTABanner from '@/components/home/CTABanner';
+import { JsonLd } from '@/components/JsonLd';
 import { ORDER_URL } from '@/lib/content';
+import { buildBookJsonLd, buildWebsiteJsonLd } from '@/lib/jsonld';
 import { pageMetadata, SITE_DESCRIPTION, SITE_TITLE } from '@/lib/metadata';
 import { sanityFetch } from '@/lib/sanity/fetch';
 import {
@@ -37,9 +39,11 @@ export default async function HomePage() {
   ]);
 
   const preorderUrl = settings?.preorderUrl ?? ORDER_URL;
+  const jsonLd = [buildBookJsonLd(settings, book), buildWebsiteJsonLd()];
 
   return (
     <main>
+      <JsonLd data={jsonLd} />
       <HeroV2
         preorderUrl={preorderUrl}
         pubDate={book?.pubDate}
