@@ -1,4 +1,4 @@
-import { SITE_BASE_URL, SITE_DESCRIPTION } from './metadata';
+import { SITE_BASE_URL, SITE_DESCRIPTION, SITE_TITLE } from './metadata';
 import { urlFor } from './sanity/image';
 import { toParagraphText } from './sanity/portable';
 import type { BlogPost, Book, SiteSettings } from './sanity/types';
@@ -94,6 +94,59 @@ export function buildBookJsonLd(settings: SiteSettings | null, book: Book | null
     ...(book?.pubDate && { datePublished: book.pubDate }),
     ...(book?.pageCount && { numberOfPages: book.pageCount }),
     ...(workExample.length > 0 && { workExample }),
+  };
+}
+
+export function buildProductJsonLd(settings: SiteSettings | null, book: Book | null) {
+  const preorderUrl = settings?.preorderUrl;
+  const cover = book?.coverImage ? urlFor(book.coverImage).width(800).url() : FALLBACK_COVER;
+  const description =
+    (book?.description ?? []).map(toParagraphText).join(' ').trim() || SITE_DESCRIPTION;
+  const publisher = settings?.publisher;
+
+  const softPrice = parsePrice(book?.softcover?.price);
+  const hardPrice = parsePrice(book?.hardcover?.price);
+  const prices = [softPrice, hardPrice].filter((p): p is string => Boolean(p)).map(Number);
+
+  if (!preorderUrl || prices.length === 0) return null;
+
+  const lowPrice = Math.min(...prices).toFixed(2);
+  const highPrice = Math.max(...prices).toFixed(2);
+
+  const primaryIsbn = (book?.softcover?.isbn ?? book?.hardcover?.isbn ?? '').replace(/[^0-9]/g, '');
+
+  const offers =
+    prices.length === 1
+      ? {
+          '@type': 'Offer' as const,
+          price: lowPrice,
+          priceCurrency: 'USD',
+          availability: 'https://schema.org/PreOrder',
+          url: preorderUrl,
+        }
+      : {
+          '@type': 'AggregateOffer' as const,
+          priceCurrency: 'USD',
+          lowPrice,
+          highPrice,
+          offerCount: prices.length,
+          availability: 'https://schema.org/PreOrder',
+          url: preorderUrl,
+        };
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    '@id': `${SITE_BASE_URL}/#product`,
+    name: SITE_TITLE,
+    description,
+    image: cover,
+    url: SITE_BASE_URL,
+    category: 'Book',
+    ...(publisher && { brand: { '@type': 'Brand', name: publisher } }),
+    ...(primaryIsbn.length === 13 && { gtin13: primaryIsbn }),
+    ...(primaryIsbn && { sku: primaryIsbn }),
+    offers,
   };
 }
 
