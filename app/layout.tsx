@@ -26,7 +26,7 @@ const jetbrains = JetBrains_Mono({
 
 const SITE_TITLE = "The Fightin' Tenth — A Memoir by Capt. Michael Makatura";
 const SITE_DESCRIPTION =
-  "Cold War to Desert Storm with the 10th — one of NATO's most elite tactical fighter squadrons. A memoir by Captain Michael Makatura.";
+  "Cold War to Desert Storm with the 10th — one of NATO's most elite fighter squadrons. A memoir by Captain Michael Makatura.";
 
 export const metadata: Metadata = {
   title: SITE_TITLE,
