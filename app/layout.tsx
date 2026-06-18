@@ -30,9 +30,17 @@ export const metadata: Metadata = {
     "Behind the wire of one of NATO's most elite tactical fighter squadrons — the 10th — during the final years of the Cold War and Operation Desert Storm. A memoir by Captain Michael Makatura.",
   metadataBase: new URL('https://www.thefightintenth.com'),
   openGraph: {
-    title: "The Fightin' Tenth",
+    title: "The Fightin' Tenth — A Memoir by Captain Michael Makatura",
     description: 'Cold War to Desert Storm — a memoir by Captain Michael Makatura.',
+    url: 'https://www.thefightintenth.com',
+    siteName: "The Fightin' Tenth",
     type: 'website',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "The Fightin' Tenth — A Memoir by Captain Michael Makatura",
+    description: 'Cold War to Desert Storm — a memoir by Captain Michael Makatura.',
   },
 };
 
