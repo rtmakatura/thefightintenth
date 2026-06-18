@@ -24,14 +24,17 @@ const jetbrains = JetBrains_Mono({
   variable: '--font-mono',
 });
 
+const SITE_TITLE = "The Fightin' Tenth — A Memoir by Capt. Michael Makatura";
+const SITE_DESCRIPTION =
+  "Cold War to Desert Storm with the 10th — one of NATO's most elite tactical fighter squadrons. A memoir by Captain Michael Makatura.";
+
 export const metadata: Metadata = {
-  title: "The Fightin' Tenth — A Memoir by Captain Michael Makatura",
-  description:
-    "Behind the wire of one of NATO's most elite tactical fighter squadrons — the 10th — during the final years of the Cold War and Operation Desert Storm. A memoir by Captain Michael Makatura.",
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
   metadataBase: new URL('https://www.thefightintenth.com'),
   openGraph: {
-    title: "The Fightin' Tenth — A Memoir by Captain Michael Makatura",
-    description: 'Cold War to Desert Storm — a memoir by Captain Michael Makatura.',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     url: 'https://www.thefightintenth.com',
     siteName: "The Fightin' Tenth",
     type: 'website',
@@ -39,8 +42,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "The Fightin' Tenth — A Memoir by Captain Michael Makatura",
-    description: 'Cold War to Desert Storm — a memoir by Captain Michael Makatura.',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
   },
 };
 

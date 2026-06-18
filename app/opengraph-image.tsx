@@ -26,10 +26,10 @@ export default async function OpengraphImage() {
   const subtitle = 'Cold War to Desert Storm';
   const eyebrow = 'A MEMOIR';
   const byline = 'BY CAPTAIN MICHAEL MAKATURA';
-  const domain = 'thefightintenth.com';
+  const cta = 'PRE-ORDER NOW  →';
 
   const playfairText = title;
-  const sansText = `${subtitle}${eyebrow}${byline}${domain}`;
+  const sansText = `${subtitle}${eyebrow}${byline}${cta}`;
 
   const [playfairBold, sourceSans] = await Promise.all([
     loadGoogleFont('Playfair Display', 700, playfairText),
@@ -146,14 +146,14 @@ export default async function OpengraphImage() {
             <div
               style={{
                 fontFamily: 'Source Sans 3',
-                fontSize: '15px',
-                color: '#52525C',
-                marginTop: '10px',
-                letterSpacing: '0.18em',
+                fontSize: '22px',
+                color: '#4894D0',
+                marginTop: '14px',
+                letterSpacing: '0.22em',
                 fontWeight: 600,
               }}
             >
-              {domain}
+              {cta}
             </div>
           </div>
         </div>
