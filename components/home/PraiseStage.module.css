@@ -4,6 +4,16 @@
   padding: 3rem 0 1rem;
 }
 
+@media (max-width: 600px) {
+  .stage {
+    min-height: 0;
+    padding: 2rem 0 1rem;
+  }
+  .quote {
+    min-height: 0;
+  }
+}
+
 .quote {
   font-family: var(--font-display);
   font-style: italic;
