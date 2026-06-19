@@ -79,6 +79,7 @@ export default function HeroV2({
 
       <div className={styles.poster}>
         <div className={styles.byline}>
+          <span className={styles.bylineRule} aria-hidden="true" />
           <span className={styles.bylineText}>
             <span className={styles.bylineBy}>{bylineLabel ?? DEFAULTS.bylineLabel}</span>
             {author ?? DEFAULTS.author}

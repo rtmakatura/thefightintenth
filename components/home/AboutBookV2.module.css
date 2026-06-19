@@ -13,13 +13,10 @@
   .coverStage {
     max-width: clamp(260px, 70vw, 380px);
     margin: 0 auto;
-    position: static;
   }
 }
 
 .coverStage {
-  position: sticky;
-  top: 110px;
   perspective: 1200px;
 }
 
