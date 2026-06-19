@@ -73,6 +73,10 @@ p { margin: 0 0 1.1rem; }
 .container { max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem; }
 .container-narrow { max-width: var(--narrow-w); margin: 0 auto; padding: 0 1.5rem; }
 
+@media (max-width: 600px) {
+  .container, .container-narrow { padding: 0 1rem; }
+}
+
 .section { padding: var(--section-y) 0; position: relative; }
 .section-light { background: var(--cream); color: var(--text-pri); }
 .section-dark { background: var(--dark-bg); color: var(--text-light); }
@@ -129,7 +133,9 @@ p { margin: 0 0 1.1rem; }
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
+  min-height: 44px;
   padding: 0.95rem 2rem;
   font-family: var(--font-body);
   font-size: 0.82rem;
