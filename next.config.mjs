@@ -1,6 +1,30 @@
+// Podcast referral short links. Add a new slug here and it becomes a 302
+// redirect from /<slug> to the homepage with matching UTM parameters.
+// Keep slugs distinct from real routes (about, blog, contact, endorsements,
+// excerpts, news, photos, press, studio) — redirects run before page routes.
+const PODCAST_REFERRAL_SLUGS = [
+  'cwc',
+  'beard',
+  'fafo',
+  'middle',
+  'truestory',
+  'cuppa',
+  'elsplend',
+  'infinite',
+];
+
+const podcastRedirect = (slug) => ({
+  source: `/${slug}`,
+  destination: `/?utm_source=${slug}&utm_medium=podcast&utm_campaign=fightin-tenth`,
+  permanent: false, // temporary redirect — destinations may change later
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  async redirects() {
+    return PODCAST_REFERRAL_SLUGS.map(podcastRedirect);
+  },
   async headers() {
     return [
       {

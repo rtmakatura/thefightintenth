@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Playfair_Display, Source_Sans_3, JetBrains_Mono } from 'next/font/google';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { SITE_BASE_URL, SITE_DESCRIPTION, SITE_TITLE } from '@/lib/metadata';
@@ -54,6 +55,12 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+// Only tag production builds so local `next dev` sessions don't pollute GA data.
+const gaId =
+  process.env.NODE_ENV === 'production'
+    ? process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+    : undefined;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
@@ -65,6 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Analytics />
         <SpeedInsights />
       </body>
+      {gaId && <GoogleAnalytics gaId={gaId} />}
     </html>
   );
 }
